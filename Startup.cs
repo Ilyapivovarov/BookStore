@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStore.AppData;
+using BookStore.Auth.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +30,42 @@ namespace BookStore
             services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(con));
 
             services.AddControllers();
+
+            
+
+            var authOptions = Configuration.GetSection("Auth");
+            services.Configure<AuthOptions>(authOptions);
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
+
+            var authOpt = Configuration.GetSection("Auth").Get<AuthOptions>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = authOpt.Issuer,
+
+                        ValidateAudience = true,
+                        ValidAudience = authOpt.Audience,
+
+                        ValidateLifetime = true,
+
+                        IssuerSigningKey = authOpt.GetSemmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true
+                    };
+                });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,8 +78,12 @@ namespace BookStore
 
             app.UseHttpsRedirection();
 
+
             app.UseRouting();
 
+            app.UseCors();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

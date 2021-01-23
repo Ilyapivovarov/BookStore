@@ -13,7 +13,6 @@ namespace BookStore.AppData
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
              : base(options)
         {
-          //  Database.EnsureDeleted();
         }
     }
 }

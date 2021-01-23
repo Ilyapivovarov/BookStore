@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BookStore.AppData;
 using BookStore.AppData.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,6 +16,8 @@ namespace BookStore.Controllers
     public class ProductController : Controller
     {
         public ApplicationContext DataBase { get; set; }
+
+        private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value); 
 
         public ProductController(ApplicationContext context)
         {
@@ -28,9 +32,10 @@ namespace BookStore.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public IEnumerable<Product> Get()
+        [Authorize]
+        public IActionResult Get()
         {
-            return DataBase.Products.ToList();
+            return Ok(UserId);
         }
 
         // GET api/values/5
