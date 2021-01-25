@@ -84,6 +84,7 @@ namespace BookStore
             app.UseCors();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

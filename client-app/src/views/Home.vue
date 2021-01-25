@@ -1,20 +1,19 @@
 <template>
-  <div class="home">
-    as
-    {{ usersList }}
-    1
-  </div>
+  <div class="home"></div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   name: "Home",
   components: {},
-  data: () => ({}),
-  computed: {
-    ...mapGetters("users", ["usersList"])
-  }
+  mounted() {},
+  computed: {}
 };
 </script>
+
+<style scoped>
+form > * {
+  display: block;
+  text-align: left;
+}
+</style>

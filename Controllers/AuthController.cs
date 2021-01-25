@@ -27,26 +27,65 @@ namespace BookStore.Controllers
         {
             DataBase = context;
             AuthOptions = authOptions;
+
+            if (!DataBase.Users.Any())
+            {
+                DataBase.Users.Add(new User
+                {
+                    Email = "admin@mail.com",
+                    FirstName = "Ad",
+                    LastName = "Min",
+                    Password = "admin@mail.com"
+                });
+            }
+
+            DataBase.SaveChanges();
+
         }
 
         [Route("login")]
         [HttpPost]
-
         public IActionResult Login(Login request)
         {
             var user = AuthenticateUser(request.Email, request.Password);
 
             if (user != null)
             {
-               var token = GenerateJWT(user);
+                var token = GenerateJWT(user);
+
+                DataBase.Sessions.Add(new Session { Token = token, UserId = user.Id });
+
+                DataBase.SaveChangesAsync();
 
                 return Ok(new
                 {
-                    access_token = token
-                }); 
+                    access_token = token,
+                });
             }
 
             return Unauthorized();
+        }
+
+        [Route("profile/{token}")]
+        [HttpGet]
+        public IActionResult GetProfile(string token)
+        {
+            if (token == null)
+            {
+                return BadRequest();
+            }
+
+            var session = DataBase.Sessions.Single(u => u.Token == token);
+
+            var curUser = DataBase.Users.Single(u => u.Id == session.UserId);
+
+            return Ok(new Profile
+            {
+                Id = curUser.Id,
+                Email = curUser.Email,
+                FirstName = curUser.FirstName,
+                LastName = curUser.LastName
+            });
         }
 
         private User AuthenticateUser(string email, string password)
@@ -66,7 +105,8 @@ namespace BookStore.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.FirstName + " " + user.LastName)
             };
 
             var token = new JwtSecurityToken(
