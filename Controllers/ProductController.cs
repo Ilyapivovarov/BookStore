@@ -15,9 +15,8 @@ namespace BookStore.Controllers
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
-        public ApplicationContext DataBase { get; set; }
-
-        private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value); 
+        private ApplicationContext DataBase { get; set; }
+        private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         public ProductController(ApplicationContext context)
         {
@@ -25,42 +24,88 @@ namespace BookStore.Controllers
 
             if (!DataBase.Products.Any())
             {
-                DataBase.Products.Add(new Product { Name = "test", Descriptoin = "asd" });
-
+                DataBase.Products.Add(new Product { Name = "«Война и мир»", Descriptoin = "«Война и мир» Л. Н. Толстого — книга на все времена. Кажется, что она существовала всегда, настолько знакомым кажется текст, едва мы открываем первые страницы романа, настолько памятны многие его эпизоды: охота и святки, первый бал Наташи Ростовой, лунная ночь в Отрадном, князь Андрей в сражении при Аустерлице... Сцены «мирной», семейной жизни сменяются картинами, имеющими значение для хода всей мировой истории, но для Толстого они равноценны, связаны в едином потоке времени. Каждый эпизод важен не только для развития сюжета, но и как одно из бесчисленных проявлений жизни, которая насыщена в каждом своем моменте и которую учит любить Толстой.", Count = 5 });
                 DataBase.SaveChanges();
             }
         }
-        // GET: api/values
+
         [HttpGet]
-        [Authorize]
         public IActionResult Get()
         {
-            return Ok(UserId);
+            var products = DataBase.Products.ToList();
+            return Ok(products);
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            if (!DataBase.Products.Any(p => p.Id == id))
+            {
+                return NotFound();
+            }
+
+            var product = DataBase.Products.Single(p => p.Id == id);
+
+            return Ok(product);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Post([FromBody]Product product)
         {
+            if (product == null)
+            {
+                return BadRequest(product);
+            }
+
+            DataBase.Add(product);
+
+            DataBase.SaveChanges();
+            return Ok();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Put([FromBody]Product product)
         {
+            if (product == null)
+            {
+                return BadRequest();
+            }
+            if (!DataBase.Products.Contains(product))
+            {
+                return NotFound();
+            }
+
+            DataBase.Update(product);
+
+            DataBase.SaveChanges();
+            return Ok();
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int id)
         {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            if (!DataBase.Products.Any(p => p.Id == id))
+            {
+                return NotFound();
+            }
+
+            var product = DataBase.Products.Single(p => p.Id == id);
+
+            DataBase.Remove(product);
+            DataBase.SaveChanges();
+
+            return Ok(product);
         }
     }
 }

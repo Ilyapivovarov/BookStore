@@ -1,19 +1,22 @@
 <template>
-  <div class="home"></div>
+  <div class="home">
+    <ProductList />
+  </div>
 </template>
 
 <script>
+import ProductList from "../components/Product/ProdutList";
+
 export default {
   name: "Home",
-  components: {},
+  components: { ProductList },
   mounted() {},
   computed: {}
 };
 </script>
 
 <style scoped>
-form > * {
-  display: block;
-  text-align: left;
+.home {
+  height: 100%;
 }
 </style>

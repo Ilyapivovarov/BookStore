@@ -12,5 +12,13 @@ namespace BookStore.AppData.Entities
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public Role[] Roles { get; set; }
+
+        public enum Role
+        {
+            User,
+            Admin,
+        }
     }
 }

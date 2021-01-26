@@ -3,7 +3,10 @@
     <router-link v-if="user === null" to="/login"> Вход </router-link>
 
     <div class="user-info-wrapper" v-else>
-      {{ user.family_name }}
+      <p>{{ user.fullName }}</p>
+      <router-link v-if="user.role === 'Admin'" to="/admin"
+        >Администрирование</router-link
+      >
       <button @click="logOut()">Выход</button>
     </div>
   </span>
@@ -13,6 +16,7 @@
 export default {
   computed: {
     user() {
+      console.log(this.$store.state.auth.user);
       return this.$store.state.auth.user;
     }
   },
@@ -29,7 +33,10 @@ export default {
 span {
   float: right;
 }
-
+p {
+  display: inline;
+  margin-right: 5px;
+}
 .user-info-wrapper {
   display: inline;
 }
@@ -43,5 +50,6 @@ button {
   color: #069;
   text-decoration: underline;
   cursor: pointer;
+  margin-left: 5px;
 }
 </style>

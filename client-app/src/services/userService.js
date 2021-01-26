@@ -1,5 +1,5 @@
+import jwtDecode from "jwt-decode";
 import axios from "../plugins/axios/index";
-import jwt_decode from "jwt-decode";
 
 export const userService = {
   login,
@@ -10,16 +10,14 @@ function login(login) {
   return axios
     .post("api/auth/login", login)
     .then(response => {
+      var user = jwtDecode(response.data.access_token);
       if (response.status === 200) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(jwt_decode(response.data.access_token))
-        );
+        localStorage.setItem("user", JSON.stringify(user));
       }
-      return jwt_decode(response.data.access_token);
+      return user;
     })
-    .catch(error => {
-      console.log(error);
+    .catch(() => {
+      localStorage.removeItem("user");
     });
 }
 

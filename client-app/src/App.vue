@@ -17,3 +17,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#app {
+  height: 100%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2%;
+  margin-bottom: 7%;
+  min-width: 680px;
+}
+</style>

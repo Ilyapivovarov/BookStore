@@ -11,6 +11,7 @@ using BookStore.Auth.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using static BookStore.AppData.Entities.User;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,7 +36,8 @@ namespace BookStore.Controllers
                     Email = "admin@mail.com",
                     FirstName = "Ad",
                     LastName = "Min",
-                    Password = "admin@mail.com"
+                    Password = "admin@mail.com",
+                    Roles = new Role[] { Role.Admin }
                 });
             }
 
@@ -62,28 +64,6 @@ namespace BookStore.Controllers
             return Unauthorized();
         }
 
-        [Route("profile/{token}")]
-        [HttpGet]
-        public IActionResult GetProfile(string token)
-        {
-            if (token == null)
-            {
-                return BadRequest();
-            }
-
-            var session = DataBase.Sessions.Single(u => u.Token == token);
-
-            var curUser = DataBase.Users.Single(u => u.Id == session.UserId);
-
-            return Ok(new Profile
-            {
-                Id = curUser.Id,
-                Email = curUser.Email,
-                FirstName = curUser.FirstName,
-                LastName = curUser.LastName
-            });
-        }
-
         private User AuthenticateUser(string email, string password)
         {
             var user = DataBase.Users.Single(u => u.Email == email && u.Password == password);
@@ -102,8 +82,13 @@ namespace BookStore.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.FirstName + " " + user.LastName)
+                new Claim("fullName", user.FirstName + " " + user.LastName),
             };
+
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim("role", role.ToString()));
+            }
 
             var token = new JwtSecurityToken(
                 authParams.Issuer,
