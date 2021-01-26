@@ -1,10 +1,7 @@
-//import router from "@/router";
 import { userService } from "@/services";
+import router from "@/router";
 
-//localStorage.setItem("user", JSON.stringify({ name: "test" }));
-var a = localStorage.getItem("user");
-
-const user = JSON.parse(a);
+const user = JSON.parse(localStorage.getItem("user"));
 const initialState = user
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };
@@ -13,14 +10,14 @@ const authStore = {
   namespaced: true,
   state: initialState,
   actions: {
-    login(state, login) {
-      console.log("auth/login");
-      console.log(state);
-      console.log(login);
-      userService.login(login);
+    login({ commit }, login) {
+      console.log(commit);
+      userService.login(login).then(user => {
+        commit("loginSuccess", user);
+        router.push("/about");
+      });
     },
     logout({ commit }) {
-      console.log("auth/logout");
       userService.logout();
       commit("logout");
     }
@@ -35,11 +32,11 @@ const authStore = {
       state.user = user;
     },
     loginFailure(state) {
-      state.status = {};
+      state.status = { loggedIn: false };
       state.user = null;
     },
     logout(state) {
-      state.status = {};
+      state.status = { loggedIn: false };
       state.user = null;
     }
   }

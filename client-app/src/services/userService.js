@@ -7,21 +7,16 @@ export const userService = {
 };
 
 function login(login) {
-  console.log(login);
-  axios
-    .post("api/auth/login", {
-      email: "admin@mail.com",
-      password: "admin@mail.com"
-    })
+  return axios
+    .post("api/auth/login", login)
     .then(response => {
-      console.log(jwt_decode(response.data.access_token));
       if (response.status === 200) {
         localStorage.setItem(
           "user",
           JSON.stringify(jwt_decode(response.data.access_token))
         );
       }
-      console.log(response);
+      return jwt_decode(response.data.access_token);
     })
     .catch(error => {
       console.log(error);
@@ -29,6 +24,6 @@ function login(login) {
 }
 
 function logout() {
-  // remove user from local storage to log user out
   localStorage.removeItem("user");
+  return false;
 }

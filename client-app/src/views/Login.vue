@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="alert alert-info">
-      email: test<br />
-      Password: test
-    </div>
     <h2>Login</h2>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
@@ -44,6 +40,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   data() {
     return {
@@ -54,8 +52,12 @@ export default {
   },
   computed: {
     loggingIn() {
-      //console.log(this.$store.state.auth.status.loggedIn);
       return this.$store.state.auth.status.loggedIn;
+    }
+  },
+  created() {
+    if (this.$store.state.auth.status.loggedIn) {
+      router.push("/");
     }
   },
   methods: {

@@ -1,10 +1,7 @@
 <template>
   <div>
-    <h1>Hi {{ user.email }}!</h1>
-    <p>
-      <router-link to="/login">Logout</router-link>
-      <button @click="logOut">Logout</button>
-    </p>
+    <h1 v-if="user !== null">Hi, {{ user.email }}!</h1>
+    <h1 v-else>Не авторизованный пользователь</h1>
   </div>
 </template>
 
@@ -21,8 +18,5 @@ export default {
       dispatch("auth/logout");
     }
   }
-  // created() {
-  //   this.$store.dispatch("users/getAll");
-  // }
 };
 </script>
