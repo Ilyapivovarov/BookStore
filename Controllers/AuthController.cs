@@ -53,10 +53,6 @@ namespace BookStore.Controllers
             {
                 var token = GenerateJWT(user);
 
-                DataBase.Sessions.Add(new Session { Token = token, UserId = user.Id });
-
-                DataBase.SaveChangesAsync();
-
                 return Ok(new
                 {
                     access_token = token,

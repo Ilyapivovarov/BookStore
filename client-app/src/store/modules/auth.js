@@ -1,56 +1,46 @@
-import axios from "@/plugins/axios";
-import jwt_decode from "jwt-decode";
+//import router from "@/router";
+import { userService } from "@/services";
+
+//localStorage.setItem("user", JSON.stringify({ name: "test" }));
+var a = localStorage.getItem("user");
+
+const user = JSON.parse(a);
+const initialState = user
+  ? { status: { loggedIn: true }, user }
+  : { status: { loggedIn: false }, user: null };
 
 const authStore = {
   namespaced: true,
-  state: {
-    authorized: false,
-    curUser: {
-      id: 0,
-      firstName: "",
-      lastName: "",
-      email: "",
-      isAdmin: false
+  state: initialState,
+  actions: {
+    login(state, login) {
+      console.log("auth/login");
+      console.log(state);
+      console.log(login);
+      userService.login(login);
+    },
+    logout({ commit }) {
+      console.log("auth/logout");
+      userService.logout();
+      commit("logout");
     }
-  },
-  getters: {
-    isAuthorized: ({ authorized }) => authorized,
-    getCurUser: ({ curUser }) => curUser
   },
   mutations: {
-    SAVE_USER_INFO(state, token) {
-      console.log("SAVE USER INFO");
-
-      var decoded = jwt_decode(token);
-      console.log(decoded);
-
-      axios.get("api/auth/profile/" + token).then(response => {
-        let user = response.data;
-        state.authorized = true;
-        state.curUser.id = user.id;
-        state.curUser.firstName = user.firstName;
-        state.curUser.lastName = user.lastName;
-        state.curUser.email = user.email;
-      });
-
-      localStorage.setItem("token", token);
-    }
-  },
-  actions: {
-    authUser({ commit }, login) {
-      axios
-        .post("api/auth/login", login)
-        .then(response => {
-          console.log(response.data.access_token);
-          commit("SAVE_USER_INFO", response.data.access_token);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    loginRequest(state, user) {
+      state.status = { loggingIn: true };
+      state.user = user;
     },
-
-    Logout({ commit }) {
-      console.log(commit);
+    loginSuccess(state, user) {
+      state.status = { loggedIn: true };
+      state.user = user;
+    },
+    loginFailure(state) {
+      state.status = {};
+      state.user = null;
+    },
+    logout(state) {
+      state.status = {};
+      state.user = null;
     }
   }
 };

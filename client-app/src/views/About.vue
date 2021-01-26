@@ -1,28 +1,28 @@
 <template>
-  <div class="about">
-    <h1>auth: {{ auth }}</h1>
-    <h3>{{ curUser }}</h3>
-    <h3>{{ test }}</h3>
+  <div>
+    <h1>Hi {{ user.email }}!</h1>
+    <p>
+      <router-link to="/login">Logout</router-link>
+      <button @click="logOut">Logout</button>
+    </p>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
-  name: "About",
-
-  data: () => ({
-    auth: false,
-    curUser: Object,
-    test: ""
-  }),
-  methods: {
-    ...mapGetters("auth", ["isAuthorized", "getCurUser"])
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
   },
-  mounted() {
-    this.curUser = this.getCurUser();
-    this.test = localStorage.getItem("token");
+  methods: {
+    logOut() {
+      const { dispatch } = this.$store;
+      dispatch("auth/logout");
+    }
   }
+  // created() {
+  //   this.$store.dispatch("users/getAll");
+  // }
 };
 </script>

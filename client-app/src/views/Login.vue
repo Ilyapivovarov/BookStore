@@ -1,9 +1,23 @@
 <template>
-  <div id="login">
+  <div>
+    <div class="alert alert-info">
+      email: test<br />
+      Password: test
+    </div>
+    <h2>Login</h2>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label for="email">Username</label>
-        <input type="text" v-model="email" name="email" class="form-control" />
+        <label for="email">email</label>
+        <input
+          type="text"
+          v-model="email"
+          name="email"
+          class="form-control"
+          :class="{ 'is-invalid': submitted && !email }"
+        />
+        <div v-show="submitted && !email" class="invalid-feedback">
+          email is required
+        </div>
       </div>
       <div class="form-group">
         <label htmlFor="password">Password</label>
@@ -12,54 +26,46 @@
           v-model="password"
           name="password"
           class="form-control"
+          :class="{ 'is-invalid': submitted && !password }"
         />
+        <div v-show="submitted && !password" class="invalid-feedback">
+          Password is required
+        </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" @click="loginTest">Login</button>
+        <button class="btn btn-primary" :disabled="loggingIn">Login</button>
+        <img
+          v-show="loggingIn"
+          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+        />
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import axios from "@/plugins/axios";
-
-localStorage.setItem("token", "sdasd");
-console.log(localStorage.getItem("token"));
-
 export default {
-  name: "Login",
-  data: () => ({
-    email: "",
-    password: "",
-    error: ""
-  }),
-  methods: {
-    ...mapActions("auth", ["authUser"]),
-    handleSubmit() {},
-
-    loginTest() {
-      this.authUser({
-        email: this.email,
-        password: this.password
-      });
-    },
-
+  data() {
+    return {
+      email: "",
+      password: "",
+      submitted: false
+    };
+  },
+  computed: {
     loggingIn() {
-      axios
-        .post("api/auth/login", {
-          email: this.email,
-          password: this.password
-        })
-        .then(response => {
-          console.log(response);
-          localStorage.setItem("token", response.data.access_token);
-          this.authUser();
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      //console.log(this.$store.state.auth.status.loggedIn);
+      return this.$store.state.auth.status.loggedIn;
+    }
+  },
+  methods: {
+    handleSubmit() {
+      this.submitted = true;
+      const { email, password } = this;
+      const { dispatch } = this.$store;
+      if (email && password) {
+        dispatch("auth/login", { email, password });
+      }
     }
   }
 };
