@@ -1,23 +1,31 @@
 <template>
   <div class="prduct-item">
-    <div class="product-title">
-      {{ item.product.name }}
-    </div>
     <div class="product-short-info">
+      {{ item.product.name }}
       <div class="short-info">
         {{ item.product.descriptoin.substr(0, 100) }}...
       </div>
+      <router-link class="link" to="/"> Подробнее </router-link>
     </div>
     <div calss="product-footer">
-      <router-link class="link" to="/"> Подробнее </router-link>
-      <span>{{ item.count }}</span>
-      <button @click="removeFromBasket()">Удалить</button>
+      <div class="count-btn">
+        <button>-</button> {{ item.count }} <button>+</button>
+      </div>
+      <div class="remove-btn">
+        <button @click="removeFromBasket()">Удалить</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import image from "../../assets/rubbish.png";
 export default {
+  data() {
+    return {
+      image
+    };
+  },
   name: "BasketItem",
   props: {
     item: Object
@@ -36,8 +44,13 @@ export default {
   margin: 5px;
   padding: 10px;
 }
-button {
-  display: block;
-  float: right;
+.remove-btn {
+  text-align: right;
+}
+.count-btn {
+  margin-top: 15px;
+}
+.product-footer {
+  padding-left: 5px;
 }
 </style>
