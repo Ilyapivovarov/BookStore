@@ -13,6 +13,7 @@ function login(login) {
       var user = jwtDecode(response.data.access_token);
       if (response.status === 200) {
         localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", response.data.access_token);
       }
       return user;
     })
@@ -23,5 +24,6 @@ function login(login) {
 
 function logout() {
   localStorage.removeItem("user");
+  localStorage.removeItem("token");
   return false;
 }

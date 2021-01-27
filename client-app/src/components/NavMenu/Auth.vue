@@ -16,14 +16,12 @@
 export default {
   computed: {
     user() {
-      console.log(this.$store.state.auth.user);
       return this.$store.state.auth.user;
     }
   },
   methods: {
     logOut() {
-      const { dispatch } = this.$store;
-      dispatch("auth/logout");
+      this.$store.dispatch("auth/logout");
     }
   }
 };

@@ -1,5 +1,9 @@
 <template>
   <div class="productList">
+    <div class="toolbar">
+      <button>Редактировать</button>
+      <button>Удалить</button>
+    </div>
     <ProductItem
       v-for="(product, id) in products"
       v-bind:key="id"
@@ -16,11 +20,11 @@ export default {
   components: { ProductItem },
   computed: {
     products() {
-      return [
-        { id: 1, name: "product1" },
-        { id: 1, name: "product2" }
-      ];
+      return this.$store.state.product.products;
     }
+  },
+  mounted() {
+    this.$store.dispatch("product/getAll");
   }
 };
 </script>
@@ -28,6 +32,10 @@ export default {
 <style scoped>
 .productList {
   widows: 100%;
-  border: solid 1px;
+  margin-top: 5px;
+  padding: 2px;
+}
+.toolbar {
+  text-align: right;
 }
 </style>

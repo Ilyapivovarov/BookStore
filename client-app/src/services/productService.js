@@ -2,7 +2,7 @@ import axios from "../plugins/axios";
 
 export const productService = {
   getAll,
-  getProduct,
+  get,
   post,
   put,
   remove
@@ -21,7 +21,7 @@ function getAll() {
     });
 }
 
-function getProduct(id) {
+function get(id) {
   return axios
     .get("api/product/" + id)
     .then(response => {

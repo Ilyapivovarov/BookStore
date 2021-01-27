@@ -1,16 +1,14 @@
 <template>
   <div class="prduct-item">
     <div class="product-title">
-      title
+      {{ product.name }}
     </div>
     <div class="product-short-info">
-      <div class="product-img">img</div>
-      <div class="short-info">
-        short-if
-      </div>
+      <div class="short-info">{{ product.descriptoin.substr(0, 100) }}...</div>
     </div>
-    <div>
-      <router-link to="/"> Подробнее </router-link>
+    <div calss="product-footer">
+      <router-link class="link" to="/"> Подробнее </router-link>
+      <button class="link">Добавить в корзину</button>
     </div>
   </div>
 </template>
@@ -28,9 +26,10 @@ export default {
 .prduct-item {
   border: solid 1px;
   margin: 5px;
-  padding: 7px;
+  padding: 10px;
 }
-.product-short-info {
-  display: flex;
+button {
+  display: block;
+  float: right;
 }
 </style>

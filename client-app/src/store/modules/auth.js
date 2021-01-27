@@ -11,7 +11,6 @@ const authStore = {
   state: initialState,
   actions: {
     login({ commit }, login) {
-      console.log(commit);
       userService.login(login).then(user => {
         commit("loginSuccess", user);
         router.push("/about");
@@ -20,6 +19,7 @@ const authStore = {
     logout({ commit }) {
       userService.logout();
       commit("logout");
+      router.push("/");
     }
   },
   mutations: {
