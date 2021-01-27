@@ -22,6 +22,7 @@ export default {
 #app {
   box-sizing: content-box;
   height: 100%;
+  min-height: 350px;
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 2%;

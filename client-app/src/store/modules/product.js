@@ -1,5 +1,4 @@
 import { productService } from "@/services";
-// import router from "@/router";
 
 const productStore = {
   namespaced: true,

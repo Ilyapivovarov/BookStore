@@ -1,9 +1,5 @@
 <template>
   <div class="productList">
-    <div class="toolbar">
-      <button>Редактировать</button>
-      <button>Удалить</button>
-    </div>
     <ProductItem
       v-for="(product, id) in products"
       v-bind:key="id"
@@ -23,6 +19,7 @@ export default {
       return this.$store.state.product.products;
     }
   },
+
   mounted() {
     this.$store.dispatch("product/getAll");
   }

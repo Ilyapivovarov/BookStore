@@ -1,32 +1,30 @@
 <template>
   <div class="prduct-item">
     <div class="product-title">
-      {{ product.name }}
+      {{ item.product.name }}
     </div>
     <div class="product-short-info">
-      <div class="short-info">{{ product.descriptoin.substr(0, 100) }}...</div>
+      <div class="short-info">
+        {{ item.product.descriptoin.substr(0, 100) }}...
+      </div>
     </div>
     <div calss="product-footer">
       <router-link class="link" to="/"> Подробнее </router-link>
-      <button class="link" @click="addToBasket()">
-        Добавить в корзину
-      </button>
+      <span>{{ item.count }}</span>
+      <button @click="removeFromBasket()">Удалить</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ProductItem",
+  name: "BasketItem",
   props: {
-    product: Object
+    item: Object
   },
   methods: {
-    addToBasket() {
-      this.$store.dispatch("basket/addItem", this.product);
-    },
     removeFromBasket() {
-      this.$store.dispatch("basket/removeItem", this.product);
+      this.$store.dispatch("basket/removeItem", this.item.product);
     }
   }
 };
