@@ -18,11 +18,11 @@ namespace BookStore.Controllers
     {
 
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
-        ApplicationContext Db;
+        private ApplicationContext DataBase;
 
         public ProfileController(ApplicationContext context)
         {
-            Db = context;
+            DataBase = context;
         }
 
   

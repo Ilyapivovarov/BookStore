@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using BookStore.AppData;
 using BookStore.AppData.Entities;
 using BookStore.AppData.Models;
+using BookStore.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,7 +29,6 @@ namespace BookStore.Controllers
         {
             DataBase = context;
             UpdateOrders();
-
         }
 
         [HttpGet]
@@ -68,22 +70,26 @@ namespace BookStore.Controllers
                 return NoContent();
             }
 
-            // var curUser = DataBase.Users.Single(u => u.Id == UserId);
-            //
-            // var order = new Order
-            // {
-            //     Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString(),
-            //     Status = Order.OrderStatus.InProcess,
-            //     Customer = curUser
-            // };
+            var curUser = DataBase.Users.Single(u => u.Id == UserId);
 
-            // foreach (var item in basket)
-            // {
-            //     order.Products.Add(new Basket {Count = item.Count, Product = item.Product});
-            // }
+            foreach (var item in basket)
+            {
+                var product = DataBase.Products.Single(p => p.Id == item.Product.Id);
+                product.Count = product.Count - item.Count;
+            }
             
+            var order = new Order
+            {
+                Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString(),
+                Status = Order.OrderStatus.InProcess,
+                Customer = curUser,
+                Products = JsonConvert.SerializeObject(basket)
+            };
             
-            return Ok(basket.ToString());
+            DataBase.Orders.Add(order);
+            DataBase.SaveChanges();
+            
+            return Ok(order);
         }
 
         [HttpDelete("{id}")]
@@ -101,10 +107,18 @@ namespace BookStore.Controllers
 
             var order = DataBase.Orders.Single(o => o.Id == id);
 
-            DataBase.Remove(order);
-            await DataBase.SaveChangesAsync();
+          // var basket = JsonConvert.DeserializeObject<Array>(order.Products);
+            
+            // foreach (var item in basket)
+            // {
+            //     var product = DataBase.Products.Single(p => p.Id == item.Product.Id);
+            //     product.Count = product.Count - item.Count;
+            // }
+            
+            // DataBase.Remove(order);
+            // await DataBase.SaveChangesAsync();
 
-            return Ok();
+            return Ok(order);
         }
 
         private async void UpdateOrders()

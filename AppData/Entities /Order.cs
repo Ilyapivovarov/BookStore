@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using BookStore.AppData.Models;
 
 namespace BookStore.AppData.Entities
@@ -7,7 +8,6 @@ namespace BookStore.AppData.Entities
     public class Order
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
 
         public string Products { get; set; }
