@@ -1,5 +1,22 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <h1 v-if="user !== null">Hi, {{ user.fullName }}!</h1>
+    <h1 v-else>Не авторизованный пользователь</h1>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
+  methods: {
+    logOut() {
+      const { dispatch } = this.$store;
+      dispatch("auth/logout");
+    }
+  }
+};
+</script>

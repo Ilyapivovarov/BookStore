@@ -1,5 +1,6 @@
 ﻿using System;
 using BookStore.AppData.Entities;
+using BookStore.AppData.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.AppData
@@ -10,10 +11,12 @@ namespace BookStore.AppData
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
              : base(options)
         {
-          //  Database.EnsureDeleted();
+
         }
     }
 }

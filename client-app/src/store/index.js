@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import users from "./modules/users";
+import auth from "./modules/auth";
+import product from "./modules/product";
+import basket from "./modules/basket";
 
 Vue.use(Vuex);
 
@@ -9,6 +11,8 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    users
+    auth,
+    product,
+    basket
   }
 });

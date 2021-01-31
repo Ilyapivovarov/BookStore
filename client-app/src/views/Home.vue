@@ -1,20 +1,22 @@
 <template>
   <div class="home">
-    as
-    {{ usersList }}
-    1
+    <ProductList />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import ProductList from "../components/Product/ProdutList";
 
 export default {
   name: "Home",
-  components: {},
-  data: () => ({}),
-  computed: {
-    ...mapGetters("users", ["usersList"])
-  }
+  components: { ProductList },
+  mounted() {},
+  computed: {}
 };
 </script>
+
+<style scoped>
+.home {
+  height: 100%;
+}
+</style>
