@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BookStore.AppData.Models;
 
 namespace BookStore.AppData.Entities
 {
@@ -9,8 +10,18 @@ namespace BookStore.AppData.Entities
 
         public string Name { get; set; }
 
-        public List<Product> Products { get; set; } = new List<Product>();
+        public string Products { get; set; }
 
         public User Customer { get; set; }
+
+        public DateTime DateOfCompletion { get; private set; } = DateTime.Today.AddDays(3);
+
+        public OrderStatus Status { get; set; }
+
+        public enum OrderStatus
+        {
+            Completed,
+            InProcess
+        }
     }
 }

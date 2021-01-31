@@ -16,7 +16,6 @@ namespace BookStore.Controllers
     public class ProductController : Controller
     {
         private ApplicationContext DataBase { get; set; }
-        private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         public ProductController(ApplicationContext context)
         {

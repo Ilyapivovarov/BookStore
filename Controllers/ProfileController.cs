@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BookStore.AppData;
+using BookStore.AppData.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,15 +13,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStore.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ProfileController : Controller
     {
 
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        ApplicationContext Db;
+
+        public ProfileController(ApplicationContext context)
+        {
+            Db = context;
+        }
+
+  
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(UserId);
         }
 
         // GET api/values/5

@@ -10,7 +10,7 @@ namespace BookStore.AppData.Entities
         public string Descriptoin { get; set; }
 
         public float Price { get; set; }
-
+        
         public int Count { get; set; } = 0;
     }
 }
