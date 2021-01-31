@@ -59,7 +59,9 @@ export default {
 
 <style scoped>
 .basket {
-  border: solid 1px #e7e7e7;
+  border-left: solid 1px #e7e7e7;
+  border-right: solid 1px #e7e7e7;
+
   margin-top: 20px;
 }
 .basketAny {

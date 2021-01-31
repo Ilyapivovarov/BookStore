@@ -28,7 +28,6 @@ namespace BookStore.Controllers
         public OrderController(ApplicationContext context)
         {
             DataBase = context;
-           // UpdateOrders();
         }
 
         [HttpGet]
@@ -73,7 +72,7 @@ namespace BookStore.Controllers
             
             var order = new Order
             {
-                Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString(),
+                Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString().Substring(4),
                 Status = Order.OrderStatus.InProcess,
                 Customer = curUser
             };
@@ -104,30 +103,11 @@ namespace BookStore.Controllers
             }
 
             var order = DataBase.Orders.Single(o => o.Id == id);
-
-          // var basket = JsonConvert.DeserializeObject<Array>(order.Products);
             
-            // foreach (var item in basket)
-            // {
-            //     var product = DataBase.Products.Single(p => p.Id == item.Product.Id);
-            //     product.Count = product.Count - item.Count;
-            // }
-            
-            // DataBase.Remove(order);
-            // await DataBase.SaveChangesAsync();
+            DataBase.Remove(order);
+            await DataBase.SaveChangesAsync();
 
             return Ok(order);
-        }
-
-        private async void UpdateOrders()
-        {
-            var orders = DataBase.Orders.Where(o => o.DateOfCompletion < DateTime.Today).ToList();
-            foreach (var order in DataBase.Orders)
-            {
-                order.Status = Order.OrderStatus.Completed;
-            }
-
-            await DataBase.SaveChangesAsync();
         }
     }
 }
