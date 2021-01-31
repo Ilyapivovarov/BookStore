@@ -9,7 +9,9 @@
     </div>
     <div calss="product-footer">
       <div class="count-btn">
-        <button>-</button> {{ item.count }} <button>+</button>
+        <button @click="removeItem()">-</button> {{ item.count }}
+        <button @click="addItem()">+</button>
+        <span class="error">{{ errorMsg }}</span>
       </div>
       <div class="remove-btn">
         <button @click="removeFromBasket()">Удалить</button>
@@ -19,18 +21,29 @@
 </template>
 
 <script>
-import image from "../../assets/rubbish.png";
 export default {
-  data() {
-    return {
-      image
-    };
-  },
+  data: () => ({
+    errorMsg: ""
+  }),
   name: "BasketItem",
   props: {
     item: Object
   },
   methods: {
+    addItem() {
+      if (this.item.count + 1 < this.item.product.count) {
+        this.item.count++;
+        this.errorMsg = "";
+        this.$store.dispatch("basket/addElem", this.item);
+      } else this.errorMsg = "Превышенно максимальное кол-во товара";
+    },
+    removeItem() {
+      if (this.item.count - 1 >= 1) {
+        this.item.count--;
+        this.errorMsg = "";
+        this.$store.dispatch("basket/removeElem", this.item);
+      } else this.errorMsg = "Колличество товара должно быть больше 0";
+    },
     removeFromBasket() {
       this.$store.dispatch("basket/removeItem", this.item.product);
     }
@@ -52,5 +65,9 @@ export default {
 }
 .product-footer {
   padding-left: 5px;
+}
+.error {
+  display: block;
+  color: red;
 }
 </style>

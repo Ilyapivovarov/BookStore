@@ -10,6 +10,12 @@ const basketStore = {
     },
     removeItem({ commit }, product) {
       commit("removeItem", product);
+    },
+    addElem({ commit }, item) {
+      commit("addElem", item);
+    },
+    removeElem({ commit }, item) {
+      commit("removeElem", item);
     }
   },
   mutations: {
@@ -19,11 +25,11 @@ const basketStore = {
           item => item.product.id === product.id
         );
         if (result.length > 0) {
-          result.map(a => {
-            a.count++;
+          result.map(item => {
+            item.count++;
           });
         } else if (result.length === 0) {
-          state.basket.push({ product: product, count: 1 });
+          state.basket.push({ product, count: 1 });
         }
       } else {
         state.basket = [{ product, count: 1 }];
@@ -33,6 +39,22 @@ const basketStore = {
     removeItem(state, product) {
       state.basket = state.basket.filter(item => item.product !== product);
       localStorage.setItem("basket", JSON.stringify(state.basket));
+    },
+    addElem(state, item) {
+      let result = state.basket.filter(
+        stateItem => stateItem.product.id === item.product.id
+      );
+      result.map(item => {
+        state.item = item.count;
+      });
+    },
+    removeElem(state, item) {
+      let result = state.basket.filter(
+        stateItem => stateItem.product.id === item.product.id
+      );
+      result.map(item => {
+        state.item = item.count;
+      });
     }
   }
 };

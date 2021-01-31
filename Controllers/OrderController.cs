@@ -34,7 +34,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var orderCurUser = DataBase.Orders.Where(o => o.Customer.Id == UserId).ToList();
+            var orderCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.Customer.Id == UserId).ToList();
             return Ok(orderCurUser);
 
         }
@@ -72,19 +72,21 @@ namespace BookStore.Controllers
 
             var curUser = DataBase.Users.Single(u => u.Id == UserId);
 
-            foreach (var item in basket)
-            {
-                var product = DataBase.Products.Single(p => p.Id == item.Product.Id);
-                product.Count = product.Count - item.Count;
-            }
-            
             var order = new Order
             {
                 Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString(),
                 Status = Order.OrderStatus.InProcess,
                 Customer = curUser,
-                Products = JsonConvert.SerializeObject(basket)
+                
             };
+
+            foreach (var item in basket)
+            {
+                var product = DataBase.Products.Single(p => p.Id == item.ProductId);
+                product.Count = product.Count - item.Count;
+
+                order.Products.Add(item);
+            }
             
             DataBase.Orders.Add(order);
             DataBase.SaveChanges();
