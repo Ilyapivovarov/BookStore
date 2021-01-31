@@ -4,7 +4,11 @@
       {{ product.name }}
     </div>
     <div class="product-short-info">
-      <div class="short-info">{{ product.descriptoin.substr(0, 100) }}...</div>
+      <div class="short-info">
+        Описание: <br />
+        {{ product.descriptoin.substr(0, 100) }}...
+      </div>
+      <div class="count">Колличество: {{ product.count }}</div>
     </div>
     <div calss="product-footer">
       <router-link class="link" to="/"> Подробнее </router-link>
@@ -41,5 +45,8 @@ export default {
 button {
   display: block;
   float: right;
+}
+.product-short-info div {
+  margin: 7px;
 }
 </style>

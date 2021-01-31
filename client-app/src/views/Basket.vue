@@ -1,12 +1,16 @@
 <template>
   <div class="basket">
-    <div v-if="basketList !== null">
+    <div class="basketAny" v-if="basketList !== null && basketList.length > 0">
+      <p class="title">Ваш заказ:</p>
       <BasketItem v-for="(item, id) in basketList" :key="id" :item="item" />
-      <button @click="createNewOrder()">Оформить заказ</button>
-      <span class="totalPrice"> Итого: {{ totalPrice }} р</span>
+      <div class="orderFooter">
+        <button @click="createNewOrder()">Оформить заказ</button>
+        <span class="totalPrice"> Итого: {{ totalPrice }} р</span>
+        <span class="error">{{ error }}</span>
+      </div>
     </div>
 
-    <div v-else>
+    <div class="basketEmpty" v-else>
       Корзина пуста
     </div>
   </div>
@@ -14,38 +18,68 @@
 
 <script>
 import BasketItem from "../components/Basket/BasketItem";
+
 export default {
   components: {
     BasketItem
   },
+  data: () => ({
+    error: ""
+  }),
   computed: {
     basketList() {
-      return this.$store.state.basket.basket.map(item => {
-        return item;
-      });
+      if (this.$store.state.basket.basket !== null) {
+        return this.$store.state.basket.basket.map(item => {
+          this.totalPrice = this.totalPrice + item.product.price * item.count;
+          return item;
+        });
+      } else {
+        return null;
+      }
     },
     totalPrice() {
-      var totalPrice = 0;
-
+      var a = 0;
       this.$store.state.basket.basket.map(item => {
-        totalPrice = totalPrice + item.product.price * item.count;
+        a = a + item.product.price * item.count;
       });
-
-      return totalPrice;
+      return a;
     }
   },
   methods: {
-    createNewOrder() {}
+    createNewOrder() {
+      if (this.basketList !== null && this.basketList.length > 0) {
+        this.$store.dispatch("basket/createOrder");
+      } else {
+        this.error = "Корзина ничего нет";
+      }
+    }
   }
 };
 </script>
 
 <style scoped>
-button {
+.basket {
+  border: solid 1px #e7e7e7;
+  margin-top: 20px;
+}
+.basketAny {
+  margin-top: 20px;
   margin-left: 5px;
+}
+.title {
+  font-size: 25px;
 }
 .totalPrice {
   float: right;
   font-size: 24px;
+}
+.orderFooter {
+  margin-top: 20px;
+  margin-left: 5px;
+}
+.basketEmpty {
+  text-align: center;
+  font-size: 25px;
+  color: gray;
 }
 </style>

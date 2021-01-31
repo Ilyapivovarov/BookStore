@@ -11,10 +11,8 @@ function login(login) {
     .post("api/auth/login", login)
     .then(response => {
       var user = jwtDecode(response.data.access_token);
-      if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("token", response.data.access_token);
-      }
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", response.data.access_token);
       return user;
     })
     .catch(() => {

@@ -1,3 +1,6 @@
+import { orderService } from "@/services";
+import router from "@/router";
+
 const stateInit = JSON.parse(localStorage.getItem("basket"));
 const basketStore = {
   namespaced: true,
@@ -16,6 +19,9 @@ const basketStore = {
     },
     removeElem({ commit }, item) {
       commit("removeElem", item);
+    },
+    createOrder({ commit }) {
+      commit("createOrder");
     }
   },
   mutations: {
@@ -55,6 +61,16 @@ const basketStore = {
       result.map(item => {
         state.item = item.count;
       });
+    },
+    createOrder(state) {
+      var products = [];
+
+      state.basket.forEach(element => {
+        products.push({ count: element.count, productId: element.product.id });
+      });
+      orderService.post(products);
+      state.basket = [];
+      router.push("/");
     }
   }
 };

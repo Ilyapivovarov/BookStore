@@ -8,6 +8,7 @@ namespace BookStore.AppData.Entities
     public class Order
     {
         public int Id { get; set; }
+        
         public string Name { get; set; }
 
         public List<Basket> Products { get; set; } = new List<Basket>();

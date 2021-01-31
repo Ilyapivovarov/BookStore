@@ -31,14 +31,14 @@ export default {
   },
   methods: {
     addItem() {
-      if (this.item.count + 1 < this.item.product.count) {
+      if (this.item.count + 1 <= this.item.product.count) {
         this.item.count++;
         this.errorMsg = "";
         this.$store.dispatch("basket/addElem", this.item);
       } else this.errorMsg = "Превышенно максимальное кол-во товара";
     },
     removeItem() {
-      if (this.item.count - 1 >= 1) {
+      if (this.item.count - 1 !== 0) {
         this.item.count--;
         this.errorMsg = "";
         this.$store.dispatch("basket/removeElem", this.item);

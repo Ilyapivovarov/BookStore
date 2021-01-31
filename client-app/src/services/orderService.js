@@ -1,31 +1,52 @@
-import jwtDecode from "jwt-decode";
 import axios from "../plugins/axios/index";
 
-export const userService = {
-  login,
-  logout
-};
+const orderUrl = "api/order/";
 
-function login(login) {
+export const orderService = {
+  getAll,
+  get,
+  post,
+  remove
+};
+function getAll() {
   return axios
-    .post("api/auth/login", login)
+    .get(orderUrl)
     .then(response => {
-      var user = jwtDecode(response.data.access_token);
-      if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("token", response.data.access_token);
-      }
-      return user;
+      response.data;
+      return response.data;
     })
-    .catch(() => {
-      localStorage.removeItem("user");
+    .catch(error => {
+      console.log(error);
     });
 }
 
-function logout() {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-  localStorage.removeItem("basket");
+function get(id) {
+  return axios
+    .get(orderUrl + id)
+    .then(response => {
+      response.data;
+      return response.data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
 
-  return false;
+function post(order) {
+  return axios
+    .post(orderUrl, order)
+    .then(response => {
+      if (response.status === 200) {
+        localStorage.removeItem("basket");
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+function remove(id) {
+  return axios.delete(orderUrl, id).catch(error => {
+    console.log(error);
+  });
 }

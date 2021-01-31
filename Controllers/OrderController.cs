@@ -28,7 +28,7 @@ namespace BookStore.Controllers
         public OrderController(ApplicationContext context)
         {
             DataBase = context;
-            UpdateOrders();
+           // UpdateOrders();
         }
 
         [HttpGet]
@@ -59,7 +59,7 @@ namespace BookStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateOrder([FromBody] Basket[] basket)
+        public async Task<IActionResult>  CreateOrder([FromBody] Basket[] basket)
         {
             if (basket == null)
             {
@@ -69,29 +69,25 @@ namespace BookStore.Controllers
             {
                 return NoContent();
             }
-
             var curUser = DataBase.Users.Single(u => u.Id == UserId);
-
+            
             var order = new Order
             {
                 Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString(),
                 Status = Order.OrderStatus.InProcess,
-                Customer = curUser,
-                
+                Customer = curUser
             };
 
             foreach (var item in basket)
             {
                 var product = DataBase.Products.Single(p => p.Id == item.ProductId);
                 product.Count = product.Count - item.Count;
-
                 order.Products.Add(item);
             }
             
-            DataBase.Orders.Add(order);
-            DataBase.SaveChanges();
-            
-            return Ok(order);
+            await DataBase.Orders.AddAsync(order);
+            await DataBase.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
