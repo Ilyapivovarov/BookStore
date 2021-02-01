@@ -24,25 +24,20 @@ export default {
     BasketItem
   },
   data: () => ({
-    error: ""
+    error: "",
+    totalPrice: 0
   }),
   computed: {
     basketList() {
       if (this.$store.state.basket.basket !== null) {
         return this.$store.state.basket.basket.map(item => {
+          this.totalPrice = 0;
           this.totalPrice = this.totalPrice + item.product.price * item.count;
           return item;
         });
       } else {
         return null;
       }
-    },
-    totalPrice() {
-      var a = 0;
-      this.$store.state.basket.basket.map(item => {
-        a = a + item.product.price * item.count;
-      });
-      return a;
     }
   },
   methods: {

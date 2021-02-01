@@ -21,12 +21,11 @@ export default {
 <style scoped>
 #app {
   box-sizing: content-box;
-  height: 100%;
-  min-height: 350px;
+  height: auto;
+  min-height: 100%;
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 2%;
-  margin-bottom: 7%;
   min-width: 680px;
   border: solid 1px blue;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Параметры тени */

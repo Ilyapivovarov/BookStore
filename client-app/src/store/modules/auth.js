@@ -1,5 +1,4 @@
 import { userService } from "@/services";
-import router from "@/router";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const initialState = user
@@ -13,7 +12,7 @@ const authStore = {
     login({ commit }, login) {
       userService.login(login).then(user => {
         commit("loginSuccess", user);
-        router.push("/about");
+        location.href = "/";
       });
     },
     logout({ commit }) {

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BookStore.AppData;
 using BookStore.AppData.Entities;
 using BookStore.AppData.Models;
-using BookStore.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +32,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var orderCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.Customer.Id == UserId).ToList();
+            var orderCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.CustomerId == UserId).ToList();
             return Ok(orderCurUser);
 
         }
@@ -51,7 +50,7 @@ namespace BookStore.Controllers
             }
 
             var ordersCurUser = DataBase.Orders
-                .Where(o => o.Customer.Id == UserId && o.Id == id)
+                .Where(o => o.CustomerId == UserId && o.Id == id)
                 .ToList();
 
             return Ok(ordersCurUser);
@@ -74,40 +73,25 @@ namespace BookStore.Controllers
             {
                 Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString().Substring(4),
                 Status = Order.OrderStatus.InProcess,
-                Customer = curUser
+                CustomerId = curUser.Id
             };
 
+            float totalPrice = 0;
+            
             foreach (var item in basket)
             {
                 var product = DataBase.Products.Single(p => p.Id == item.ProductId);
                 product.Count = product.Count - item.Count;
                 order.Products.Add(item);
+
+                totalPrice += item.Count * product.Price;
             }
+
+            order.TotalPrice = totalPrice;
             
-            await DataBase.Orders.AddAsync(order);
+            DataBase.Orders.Add(order);
             await DataBase.SaveChangesAsync();
             return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> CancelOrder(int id)
-        {
-            if (id == 0)
-            {
-                return BadRequest();
-            }
-
-            if (!DataBase.Orders.Any(o => o.Id == id))
-            {
-                return NotFound();
-            }
-
-            var order = DataBase.Orders.Single(o => o.Id == id);
-            
-            DataBase.Remove(order);
-            await DataBase.SaveChangesAsync();
-
-            return Ok(order);
         }
     }
 }
