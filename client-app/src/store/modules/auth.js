@@ -19,7 +19,6 @@ const authStore = {
       userService.logout();
       commit("logout");
       location.href = "/";
-      //router.push("/");
     }
   },
   mutations: {

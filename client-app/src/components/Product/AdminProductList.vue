@@ -1,36 +1,75 @@
 <template>
-  <div>
+  <div class="productList">
+    <PopupWindow
+      v-if="showPopup"
+      @closePopup="closePopup()"
+      popupTitle="Создание товара"
+      @saveProduct="saveProduct()"
+    >
+      <label for="productName">Название товара</label>
+      <input name="productName" type="text" v-model="newProduct.name" />
+      <label for="productDescription">Описание товара</label>
+      <textarea
+        name="productDescription"
+        type="text"
+        v-model="newProduct.descriptoin"
+      />
+      <label for="productCount">Колличество товара</label>
+      <input name="productCount" type="number" v-model="newProduct.count" />
+
+      <label for="productPrice">Цена</label>
+      <input name="productPrice" type="number" v-model="newProduct.price" />
+    </PopupWindow>
+
     <div>
-      <button class="add">Добавить</button>
+      <button class="add" @click="openPopup">Добавить</button>
     </div>
-    <div v-for="(product, id) in products" v-bind:key="id" class="prduct-item">
-      <div class="toolbar">
-        <button class="edit">Редактировать</button>
-        <button class="remove">Удалить</button>
-      </div>
-      <div class="product-title">
-        {{ product.name }} Колличество: {{ product.count }}
-      </div>
-      <div class="product-short-info">
-        <div class="short-info">
-          {{ product.descriptoin.substr(0, 100) }}...
-        </div>
-      </div>
-      <div calss="product-footer"></div>
-    </div>
+    <AdminProductitem
+      v-for="product in products"
+      v-bind:key="product.id"
+      :product="product"
+    />
   </div>
 </template>
 
 <script>
+import AdminProductitem from "./AdminProductItem";
+import PopupWindow from "../Popup/PopupWindow";
+
 export default {
   name: "ProductList",
+  components: {
+    AdminProductitem,
+    PopupWindow
+  },
+  data: () => ({
+    showPopup: false,
 
+    newProduct: {
+      name: "",
+      description: "",
+      price: 0,
+      count: 1
+    }
+  }),
+  methods: {
+    openPopup() {
+      this.showPopup = true;
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    saveProduct() {
+      this.$store.dispatch("product/create", this.newProduct);
+      this.showPopup = false;
+    }
+  },
   computed: {
     products() {
       return this.$store.state.product.products;
     }
   },
-  mounted() {
+  beforeCreate() {
     this.$store.dispatch("product/getAll");
   }
 };
@@ -42,25 +81,12 @@ export default {
   margin-top: 5px;
   padding: 2px;
 }
-.product-title {
-  border-bottom: solid 1px grey;
-  padding-bottom: 6px;
+.productList div {
+  margin-top: 5px;
 }
-
-.prduct-item {
-  border: solid 1px;
-  margin: 5px;
-  padding: 10px;
-}
-.add {
-  margin: 5px;
-}
-.edit,
-.remove {
-  margin-right: 2px;
-  float: right;
-}
-.product-short-info {
-  padding-top: 7px;
+textarea {
+  resize: none;
+  height: 170px;
+  font-size: 14px;
 }
 </style>

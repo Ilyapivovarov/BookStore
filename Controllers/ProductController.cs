@@ -68,11 +68,11 @@ namespace BookStore.Controllers
             {
                 return BadRequest();
             }
-
+            
             DataBase.Add(product);
 
             DataBase.SaveChanges();
-            return Ok();
+            return Ok(product);
         }
 
         [HttpPut]
@@ -97,7 +97,7 @@ namespace BookStore.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async  Task<IActionResult> Delete(int id)
         {
             if (id == 0)
             {
@@ -112,7 +112,7 @@ namespace BookStore.Controllers
             var product = DataBase.Products.Single(p => p.Id == id);
 
             DataBase.Remove(product);
-            DataBase.SaveChanges();
+            await DataBase.SaveChangesAsync();
 
             return Ok(product);
         }

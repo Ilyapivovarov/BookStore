@@ -15,7 +15,7 @@ export default {
     product: Object
   }),
 
-  mounted() {
+  beforeCreate() {
     productService.get(this.basketItem.productId).then(response => {
       this.product = response;
     });

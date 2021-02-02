@@ -19,8 +19,7 @@ export default {
       return this.$store.state.product.products;
     }
   },
-
-  mounted() {
+  beforeCreate() {
     this.$store.dispatch("product/getAll");
   }
 };

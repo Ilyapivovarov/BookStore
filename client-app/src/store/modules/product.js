@@ -20,13 +20,13 @@ const productStore = {
       });
     },
     create({ commit }, product) {
-      productService.post(product).then(success => {
-        commit("createProduct", success);
+      productService.post(product).then(response => {
+        commit("createProduct", response);
       });
     },
     update({ commit }, product) {
-      productService.put(product).then(success => {
-        commit("updateProduct", success);
+      productService.put(product).then(response => {
+        commit("updateProduct", response);
       });
     },
     remove({ commit }, id) {
