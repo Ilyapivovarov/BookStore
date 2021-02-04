@@ -10,8 +10,8 @@
         <slot> </slot>
       </div>
       <div class="popupFooter">
-        <button @click="save()">Сохранить</button>
-        <button @click="close()">Закрыть без сохранения</button>
+        <button @click="submit()">{{ submitBtn }}</button>
+        <button @click="close()">{{ closeBtn }}</button>
       </div>
     </div>
   </div>
@@ -21,7 +21,9 @@
 export default {
   name: "popupWindow",
   props: {
-    popupTitle: String
+    popupTitle: String,
+    submitBtn: String,
+    closeBtn: String
   },
   mounted() {
     let vm = this;
@@ -35,8 +37,8 @@ export default {
     close() {
       this.$emit("closePopup");
     },
-    save() {
-      this.$emit("saveProduct");
+    submit() {
+      this.$emit("submit");
     }
   }
 };
@@ -47,7 +49,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   right: 0px;
   left: 0px;
   top: 0px;

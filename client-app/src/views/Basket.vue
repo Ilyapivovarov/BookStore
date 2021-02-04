@@ -4,7 +4,9 @@
       <p class="title">Ваш заказ:</p>
       <BasketItem v-for="(item, id) in basketList" :key="id" :item="item" />
       <div class="orderFooter">
-        <button @click="createNewOrder()">Оформить заказ</button>
+        <button class="createOrder" @click="createNewOrder()">
+          Оформить заказ
+        </button>
         <span class="totalPrice"> Итого: {{ totalPrice }} р</span>
         <span class="error">{{ error }}</span>
       </div>
@@ -78,5 +80,22 @@ export default {
   text-align: center;
   font-size: 25px;
   color: gray;
+}
+
+.createOrder {
+  font-size: 23px;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  border-radius: 2px;
+}
+
+.createOrder:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  transition: 0.3s;
 }
 </style>

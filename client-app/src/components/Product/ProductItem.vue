@@ -1,18 +1,47 @@
 <template>
-  <div class="prduct-item">
-    <div class="product-title">
+  <div class="prductItem">
+    <Popup
+      v-if="showPopup"
+      submitBtn="Добавить в корзину"
+      closeBtn="Закрыть"
+      @closePopup="closePopup()"
+      @submit="addToBasket()"
+    >
+      <div class="infoWrpaper">
+        <div>Название товара</div>
+        <div class="infoValue">{{ product.name }}</div>
+      </div>
+
+      <div class="infoWrpaper">
+        <div>Колличество</div>
+        <div class="infoValue">{{ product.count }} шт.</div>
+      </div>
+
+      <div class="infoWrpaper">
+        <div>Цена</div>
+        <div class="infoValue">{{ product.price }}.00 р</div>
+      </div>
+
+      <div class="descriptoinWrapper">
+        <div>Описание:</div>
+        <div class="descriptoinValue">{{ product.descriptoin }}</div>
+      </div>
+    </Popup>
+
+    <div class="productTitle">
       {{ product.name }}
     </div>
-    <div class="product-short-info">
-      <div class="short-info">
+    <div class="productShortInfo">
+      <div class="shortInfo">
         Описание: <br />
-        {{ product.descriptoin.substr(0, 100) }}...
+        {{ product.descriptoin.substr(0, 100) }}
+        <span v-if="product.descriptoin.length > 100">...</span>
       </div>
       <div class="count">Колличество: {{ product.count }}</div>
     </div>
-    <div calss="product-footer">
-      <router-link class="link" to="/"> Подробнее </router-link>
-      <button class="link" @click="addToBasket()">
+    <div calss="productFooter">
+      <button class="showInfoBtn" @click="openPopup()">Подробнее</button>
+      <button class="addToBasket" @click="addToBasket()">
         Добавить в корзину
       </button>
     </div>
@@ -20,33 +49,88 @@
 </template>
 
 <script>
+import Popup from "../Popup/PopupWindow";
+
 export default {
   name: "ProductItem",
+  components: {
+    Popup
+  },
   props: {
     product: Object
   },
+  data: () => ({
+    showPopup: false
+  }),
   methods: {
-    addToBasket() {
-      this.$store.dispatch("basket/addItem", this.product);
+    openPopup() {
+      this.showPopup = true;
     },
-    removeFromBasket() {
-      this.$store.dispatch("basket/removeItem", this.product);
+    closePopup() {
+      this.showPopup = false;
+    },
+    addToBasket() {
+      this.showPopup = false;
+      this.$store.dispatch("basket/addItem", this.product);
     }
   }
 };
 </script>
 
 <style scoped>
-.prduct-item {
+.prductItem {
   border: solid 1px;
   margin: 5px;
   padding: 10px;
 }
-button {
+.addToBasket {
   display: block;
   float: right;
 }
-.product-short-info div {
+.productShortInfo div {
   margin: 7px;
+}
+.infoWrpaper {
+  padding: 4px;
+  margin: 7px;
+  display: flex;
+  flex: content;
+  flex-basis: 50px;
+  justify-content: space-between;
+}
+
+.infoWrpaper:hover {
+  background-color: #e7e7e7;
+  transform: 0.3s;
+}
+
+.infoWrpaper div {
+  width: 50%;
+}
+
+.infoValue {
+  text-align: center;
+}
+.descriptoinWrapper {
+  padding: 4px;
+  margin: 7px;
+}
+.descriptoinValue {
+  padding: 5px;
+}
+.descriptoinValue:hover {
+  background-color: #e7e7e7;
+  transform: 0.3s;
+}
+.showInfoBtn {
+  background-color: #fff;
+  box-shadow: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  outline: none;
+}
+.showInfoBtn:hover {
+  cursor: pointer;
 }
 </style>

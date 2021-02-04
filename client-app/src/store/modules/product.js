@@ -20,9 +20,7 @@ const productStore = {
       });
     },
     create({ commit }, product) {
-      productService.post(product).then(response => {
-        commit("createProduct", response);
-      });
+      commit("createProduct", product);
     },
     update({ commit }, product) {
       productService.put(product).then(response => {
@@ -42,11 +40,9 @@ const productStore = {
     getProduct(state, product) {
       state.product = product;
     },
-    createProduct(state, success) {
-      state.success = success;
-      if (success) {
-        state.msg = "Создан";
-      } else state.msg = "Не cоздан";
+    createProduct(state, product) {
+      state.products.push(product);
+      productService.post(product);
     },
     updateProduct(state, success) {
       state.success = success;

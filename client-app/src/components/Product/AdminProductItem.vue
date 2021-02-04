@@ -2,9 +2,11 @@
   <div class="prduct-item">
     <PopupWindow
       v-if="showPopup"
-      @closePopup="closePopup()"
       popupTitle="Редактирование товара"
-      @saveProduct="saveProduct()"
+      submitBtn="Схранить"
+      closeBtn="Закрыть без сохранения"
+      @closePopup="closePopup()"
+      @submit="saveProduct()"
     >
       <label for="productName">Название товара</label>
       <input name="productName" type="text" v-model="product.name" />

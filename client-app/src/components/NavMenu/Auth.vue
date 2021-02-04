@@ -1,11 +1,13 @@
 <template>
   <span id="auth">
-    <router-link v-if="user === null" to="/login"> Вход </router-link>
+    <router-link class="navLink" v-if="user === null" to="/login">
+      Вход
+    </router-link>
 
     <div class="user-info-wrapper" v-else>
       <p>{{ user.fullName }}</p>
 
-      <router-link v-if="user.role === 'Admin'" to="/admin"
+      <router-link v-if="user.role === 'Admin'" class="navLink" to="/admin"
         >Администрирование</router-link
       >
       <button class="logout" @click="logOut()">Выход</button>
@@ -42,5 +44,15 @@ p {
 }
 #auth {
   float: right;
+}
+.logout {
+  background: blue;
+  box-shadow: none;
+  border: none;
+  color: #ffffff;
+}
+
+.logout:hover {
+  text-decoration: underline;
 }
 </style>
