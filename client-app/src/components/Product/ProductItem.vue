@@ -33,7 +33,7 @@
     </div>
     <div class="productShortInfo">
       <div class="shortInfo">
-        Описание: <br />
+        Краткое описание: <br />
         {{ product.descriptoin.substr(0, 100) }}
         <span v-if="product.descriptoin.length > 100">...</span>
       </div>
@@ -86,7 +86,23 @@ export default {
 .addToBasket {
   display: block;
   float: right;
+  margin-bottom: 10px;
+  font-size: 18px;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  border-radius: 2px;
 }
+
+.addToBasket:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  transition: 0.3s;
+}
+
 .productShortInfo div {
   margin: 7px;
 }

@@ -32,8 +32,9 @@ export default {
   computed: {
     basketList() {
       if (this.$store.state.basket.basket !== null) {
+        var vm = this;
+        vm.totalPrice = 0;
         return this.$store.state.basket.basket.map(item => {
-          this.totalPrice = 0;
           this.totalPrice = this.totalPrice + item.product.price * item.count;
           return item;
         });

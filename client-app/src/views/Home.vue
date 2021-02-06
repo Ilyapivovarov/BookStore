@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div></div>
     <ProductList />
   </div>
 </template>
@@ -15,8 +16,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.home {
-  height: 100%;
-}
-</style>
+<style scoped></style>

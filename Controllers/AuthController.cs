@@ -21,14 +21,15 @@ namespace BookStore.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public ApplicationContext DataBase { get; set; }
-        public IOptions<AuthOptions> AuthOptions { get; set; }
+        private ApplicationContext DataBase { get; set; }
+        private IOptions<AuthOptions> AuthOptions { get; set; }
 
         public AuthController(ApplicationContext context, IOptions<AuthOptions> authOptions)
         {
             DataBase = context;
             AuthOptions = authOptions;
 
+            
             if (!DataBase.Users.Any())
             {
                 DataBase.Users.Add(new User
@@ -40,7 +41,6 @@ namespace BookStore.Controllers
                     Roles = new Role[] { Role.Admin }
                 });
             }
-
             DataBase.SaveChanges();
 
         }
@@ -53,7 +53,7 @@ namespace BookStore.Controllers
 
             if (user != null)
             {
-                var token = GenerateJWT(user);
+                var token = GenerateJwt(user);
 
                 return Ok(new
                 {
@@ -71,11 +71,11 @@ namespace BookStore.Controllers
             return user;
         }
 
-        private string GenerateJWT(User user)
+        private string GenerateJwt(User user)
         {
             var authParams = AuthOptions.Value;
 
-            var securityKey = authParams.GetSemmetricSecurityKey();
+            var securityKey = authParams.GetSymmetricSecurityKey();
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>

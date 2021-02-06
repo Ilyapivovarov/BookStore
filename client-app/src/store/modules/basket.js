@@ -43,7 +43,9 @@ const basketStore = {
       localStorage.setItem("basket", JSON.stringify(state.basket));
     },
     removeItem(state, product) {
-      state.basket = state.basket.filter(item => item.product !== product);
+      state.basket = state.basket.filter(
+        item => item.product.id !== product.id
+      );
       localStorage.setItem("basket", JSON.stringify(state.basket));
     },
     addElem(state, item) {

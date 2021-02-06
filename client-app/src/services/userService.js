@@ -24,6 +24,4 @@ function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
   localStorage.removeItem("basket");
-
-  return false;
 }

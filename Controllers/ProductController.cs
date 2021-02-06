@@ -38,7 +38,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var products = DataBase.Products.ToList();
+            var products = DataBase.Products.Where(p => p.Count > 0).ToList();
             return Ok(products);
         }
 

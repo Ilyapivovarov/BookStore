@@ -17,7 +17,7 @@ namespace BookStore
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
@@ -26,7 +26,7 @@ namespace BookStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string con = Configuration.GetConnectionString("DefaultConnection");
+            var con = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(con));
 
             services.AddControllers();
@@ -60,15 +60,14 @@ namespace BookStore
 
                         ValidateLifetime = true,
 
-                        IssuerSigningKey = authOpt.GetSemmetricSecurityKey(),
+                        IssuerSigningKey = authOpt.GetSymmetricSecurityKey(),
                         ValidateIssuerSigningKey = true
                     };
                 });
 
 
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -77,8 +76,7 @@ namespace BookStore
             }
 
             app.UseHttpsRedirection();
-
-
+            
             app.UseRouting();
 
             app.UseCors();

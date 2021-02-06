@@ -32,8 +32,9 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var orderCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.CustomerId == UserId).ToList();
-            return Ok(orderCurUser);
+            var ordersCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.CustomerId == UserId).ToList();
+            
+            return Ok(ordersCurUser);
 
         }
 

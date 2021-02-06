@@ -3,10 +3,9 @@
     <div class="productShortInfo">
       Название: {{ item.product.name }}
       <div class="shortInfo">
-        Краткое описание:
-        {{ item.product.descriptoin.substr(0, 100) }}...
+        Описание:
+        {{ item.product.descriptoin }}
       </div>
-      <router-link class="link" to="/"> Подробнее </router-link>
     </div>
     <div calss="productFooter">
       <div class="countBtn">
@@ -29,30 +28,31 @@ import rightArrow from "../../assets/right-arrow.png";
 import rubbish from "../../assets/rubbish.png";
 
 export default {
+  name: "BasketItem",
+
+  props: {
+    item: Object
+  },
   data: () => ({
     errorMsg: " ",
     leftArrow,
     rightArrow,
     rubbish
   }),
-  name: "BasketItem",
-  props: {
-    item: Object
-  },
   methods: {
     addItem() {
       if (this.item.count + 1 <= this.item.product.count) {
         this.item.count++;
         this.errorMsg = " ";
         this.$store.dispatch("basket/addElem", this.item);
-      } else this.errorMsg = "Максимально колличество товара";
+      } else this.errorMsg = "Максимальное количество товара";
     },
     removeItem() {
       if (this.item.count - 1 !== 0) {
         this.item.count--;
         this.errorMsg = "";
         this.$store.dispatch("basket/removeElem", this.item);
-      } else this.errorMsg = "Колличество товара должно быть больше 0";
+      } else this.errorMsg = "Количество товара должно быть больше 0";
     },
     removeFromBasket() {
       this.$store.dispatch("basket/removeItem", this.item.product);
@@ -64,9 +64,9 @@ export default {
 <style scoped>
 .prductItem {
   border: solid 1px;
+  height: auto;
   margin: 5px;
   padding: 10px;
-  height: 190px;
 }
 
 .countBtn {
@@ -106,6 +106,49 @@ export default {
 }
 
 .rubbish:hover {
+  cursor: pointer;
+}
+.infoWrpaper {
+  padding: 4px;
+  margin: 7px;
+  display: flex;
+  flex: content;
+  flex-basis: 50px;
+  justify-content: space-between;
+}
+
+.infoWrpaper:hover {
+  background-color: #e7e7e7;
+  transform: 0.3s;
+}
+
+.infoWrpaper div {
+  width: 50%;
+}
+
+.infoValue {
+  text-align: center;
+}
+.descriptoinWrapper {
+  padding: 4px;
+  margin: 7px;
+}
+.descriptoinValue {
+  padding: 5px;
+}
+.descriptoinValue:hover {
+  background-color: #e7e7e7;
+  transform: 0.3s;
+}
+.showInfoBtn {
+  background-color: #fff;
+  box-shadow: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  outline: none;
+}
+.showInfoBtn:hover {
   cursor: pointer;
 }
 </style>

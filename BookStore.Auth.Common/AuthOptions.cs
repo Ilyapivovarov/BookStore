@@ -14,7 +14,7 @@ namespace BookStore.Auth.Common
 
         public int TokenLifetime { get; set; }
 
-        public  SymmetricSecurityKey GetSemmetricSecurityKey()
+        public  SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
         }
