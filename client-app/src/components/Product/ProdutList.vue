@@ -76,7 +76,7 @@ export default {
   methods: {
     addToBasket(product) {
       this.showPopup = false;
-      this.$store.dispatch("basket/addItem", product);
+      this.$store.dispatch("basket/addBook", product);
     },
     nextPage() {
       this.pageNumber++;

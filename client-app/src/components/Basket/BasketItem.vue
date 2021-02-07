@@ -5,9 +5,9 @@
     <div calss="basketFooter">
       <div class="countBtn">
         <p>Колличество</p>
-        <img class="arrow" @click="removeItem()" :src="leftArrow" />
+        <img class="arrow" @click="removeBookItem()" :src="leftArrow" />
         {{ item.count }}
-        <img class="arrow" @click="addItem()" :src="rightArrow" />
+        <img class="arrow" @click="addBookItem()" :src="rightArrow" />
         <span class="error">{{ errorMsg }}</span>
       </div>
     </div>
@@ -37,22 +37,22 @@ export default {
     rubbish
   }),
   methods: {
-    addItem() {
+    addBookItem() {
       if (this.item.count + 1 <= this.item.product.count) {
         this.item.count++;
         this.errorMsg = " ";
-        this.$store.dispatch("basket/addElem", this.item);
+        this.$store.dispatch("basket/addBookItem", this.item);
       } else this.errorMsg = "Максимальное количество товара";
     },
-    removeItem() {
+    removeBookItem() {
       if (this.item.count - 1 !== 0) {
         this.item.count--;
         this.errorMsg = "";
-        this.$store.dispatch("basket/removeElem", this.item);
+        this.$store.dispatch("basket/removeBookItem", this.item);
       } else this.errorMsg = "Количество товара должно быть больше 0";
     },
     removeFromBasket() {
-      this.$store.dispatch("basket/removeItem", this.item.product);
+      this.$store.dispatch("basket/removeBook", this.item.product);
     }
   }
 };

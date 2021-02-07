@@ -8,43 +8,46 @@
         <option>Только выполненные заказы</option>
       </select>
     </div>
-    <div
-      class="order"
-      v-for="order in orders"
-      :key="order.id"
-      v-bind:order="order.products"
-      :class="selectStyle(order)"
-    >
-      <div class="orderName">
-        <h2>
-          {{ order.name }}
-        </h2>
-      </div>
+    <div class="orderWrapper" v-if="orders.length > 0">
+      <div
+        class="order"
+        v-for="order in orders"
+        :key="order.id"
+        v-bind:order="order.products"
+        :class="selectStyle(order)"
+      >
+        <div class="orderName">
+          <h2>
+            {{ order.name }}
+          </h2>
+        </div>
 
-      <div class="orderInfo">
-        <h3>
-          Дата завершения заказа: {{ order.dateOfCompletion.split("T")[0] }}
-        </h3>
+        <div class="orderInfo">
+          <h3>
+            Дата завершения заказа: {{ order.dateOfCompletion.split("T")[0] }}
+          </h3>
 
-        <h3 v-if="order.status === 1">
-          Статус: "В процессе"
-        </h3>
-        <h3 v-else>Статус: "Выполнен"</h3>
-      </div>
+          <h3 v-if="order.status === 1">
+            Статус: "В процессе"
+          </h3>
+          <h3 v-else>Статус: "Выполнен"</h3>
+        </div>
 
-      <div class="orderProducts">
-        <OrderProducts
-          v-for="(item, id) in order.products"
-          :key="id"
-          :count="id + 1"
-          v-bind:basketItem="item"
-        />
-      </div>
+        <div class="orderProducts">
+          <OrderProducts
+            v-for="(item, id) in order.products"
+            :key="id"
+            :count="id + 1"
+            v-bind:basketItem="item"
+          />
+        </div>
 
-      <div class="orderFooter">
-        <h3>Итого: {{ order.totalPrice }}р</h3>
+        <div class="orderFooter">
+          <h3>Итого: {{ order.totalPrice }}р</h3>
+        </div>
       </div>
     </div>
+    <div v-else><h2>У вас ещё нет заказов</h2></div>
   </div>
 </template>
 
@@ -82,7 +85,7 @@ export default {
       } else return "orderCompleted";
     }
   },
-  mounted() {
+  beforeCreate() {
     orderService.getAll().then(response => {
       this.ordersStore = response;
       this.orders = this.ordersStore.filter(order => order.status === 1);

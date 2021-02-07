@@ -22,13 +22,22 @@
           </div>
         </div>
         <Popup
-          v-if="showPopup"
+          v-if="showPopup && user"
           submitBtn="Да"
           closeBtn="Нет"
           @closePopup="closePopup()"
           @submit="createNewOrder()"
         >
           <h2>Вы уверенны что хотите сделать заказ?</h2>
+        </Popup>
+        <Popup
+          v-if="showPopup && !user"
+          submitBtn="На страницу авторизации"
+          closeBtn="Закрыть окно"
+          @closePopup="closePopup()"
+          @submit="pushToLogin()"
+        >
+          <h2>Пожалуйста, пройдите авторизацию</h2>
         </Popup>
       </div>
       <div class="basketEmpty" v-if="!basketList">
@@ -41,6 +50,7 @@
 <script>
 import BasketItem from "../components/Basket/BasketItem";
 import Popup from "../components/Popup/PopupWindow";
+import router from "@/router";
 
 export default {
   components: {
@@ -53,6 +63,9 @@ export default {
     showPopup: false
   }),
   computed: {
+    user() {
+      return this.$store.state.auth.user;
+    },
     basketList() {
       if (this.$store.state.basket.basket !== null) {
         var vm = this;
@@ -79,6 +92,9 @@ export default {
     },
     closePopup() {
       this.showPopup = false;
+    },
+    pushToLogin() {
+      router.push("/login");
     }
   }
 };

@@ -1,5 +1,4 @@
 import { userService } from "@/services";
-import router from "@/router";
 
 var user = JSON.parse(localStorage.getItem("user"));
 
@@ -42,14 +41,11 @@ const authStore = {
     login(state, user) {
       state.status = { loggedIn: true };
       state.user = user;
-      router.push("/");
-      //location.href = "/";
+      location.href = "/";
     },
     logout(state) {
       state.status = { loggedIn: false };
       state.user = null;
-
-      //location.href = "/";
     },
     loginFailed(state) {
       state.status = { loggedIn: false };

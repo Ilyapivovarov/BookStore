@@ -6,9 +6,7 @@ using System.Security.Claims;
 using BookStore.AppData;
 using BookStore.AppData.Entities;
 using BookStore.AppData.Models;
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using static BookStore.AppData.Entities.User;

@@ -75,7 +75,7 @@ export default {
     },
     addToBasket() {
       this.showPopup = false;
-      this.$store.dispatch("basket/addItem", this.product);
+      this.$store.dispatch("basket/addBook", this.product);
     }
   }
 };
