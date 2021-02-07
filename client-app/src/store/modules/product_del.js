@@ -20,13 +20,11 @@ const productStore = {
       });
     },
     create({ commit }, product) {
-      productService.post(product).then(success => {
-        commit("createProduct", success);
-      });
+      commit("createProduct", product);
     },
     update({ commit }, product) {
-      productService.put(product).then(success => {
-        commit("updateProduct", success);
+      productService.put(product).then(response => {
+        commit("updateProduct", response);
       });
     },
     remove({ commit }, id) {
@@ -42,23 +40,15 @@ const productStore = {
     getProduct(state, product) {
       state.product = product;
     },
-    createProduct(state, success) {
-      state.success = success;
-      if (success) {
-        state.msg = "Создан";
-      } else state.msg = "Не cоздан";
+    createProduct(state, product) {
+      state.products.push(product);
+      productService.post(product);
     },
     updateProduct(state, success) {
       state.success = success;
-      if (success) {
-        state.msg = "Обновлен";
-      } else state.msg = "Не обновлен";
     },
     removeProduct(state, success) {
       state.success = success;
-      if (success) {
-        state.msg = "Удален";
-      } else state.msg = "Не удален";
     }
   },
   getters: {

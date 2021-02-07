@@ -2,13 +2,13 @@
 
 namespace BookStore.Migrations
 {
-    public partial class price : Migration
+    public partial class order_totalprice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<float>(
-                name: "Price",
-                table: "Products",
+                name: "TotalPrice",
+                table: "Orders",
                 type: "real",
                 nullable: false,
                 defaultValue: 0f);
@@ -17,8 +17,8 @@ namespace BookStore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Price",
-                table: "Products");
+                name: "TotalPrice",
+                table: "Orders");
         }
     }
 }

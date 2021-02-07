@@ -1,10 +1,11 @@
 <template>
   <nav>
-    <router-link to="/"> Главная страница </router-link> |
-    <router-link to="/my-orders"> Мои заказы </router-link> |
-    <router-link to="/about"> About </router-link> |
-    <router-link to="/basket"> Корзина ({{ count }}) </router-link>
-    <Auth />
+    <router-link class="navLink" to="/"> Главная страница </router-link> |
+    <router-link class="navLink" to="/my-orders"> Мои заказы </router-link> |
+    <router-link class="navLink" to="/basket">
+      Корзина ({{ count }})
+    </router-link>
+    <Auth class="navLink" />
   </nav>
 </template>
 
@@ -24,3 +25,21 @@ export default {
   }
 };
 </script>
+
+<style>
+nav {
+  padding: 1px 2px;
+  background: blue;
+  min-height: 41px;
+}
+.navLink {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 22px;
+  text-decoration: none;
+  color: white;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+</style>

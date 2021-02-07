@@ -26,11 +26,8 @@ namespace BookStore.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateOfCompletion")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -38,9 +35,10 @@ namespace BookStore.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -117,15 +115,6 @@ namespace BookStore.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Basket");
-                });
-
-            modelBuilder.Entity("BookStore.AppData.Entities.Order", b =>
-                {
-                    b.HasOne("BookStore.AppData.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>

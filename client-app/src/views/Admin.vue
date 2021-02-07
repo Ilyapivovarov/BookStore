@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AdminProductList from "../components/Product/AdminProductList";
+import AdminProductList from "../components/Admin/ProductList";
 import router from "@/router";
 export default {
   beforeCreate() {

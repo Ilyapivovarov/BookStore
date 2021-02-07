@@ -35,10 +35,8 @@ function get(id) {
 function post(order) {
   return axios
     .post(orderUrl, order)
-    .then(response => {
-      if (response.status === 200) {
-        localStorage.removeItem("basket");
-      }
+    .then(() => {
+      localStorage.removeItem("basket");
     })
     .catch(error => {
       console.log(error);

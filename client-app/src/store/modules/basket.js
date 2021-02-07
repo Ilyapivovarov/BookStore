@@ -8,24 +8,24 @@ const basketStore = {
     basket: stateInit
   },
   actions: {
-    addItem({ commit }, product) {
-      commit("addItem", product);
+    addBook({ commit }, product) {
+      commit("addBook", product);
     },
-    removeItem({ commit }, product) {
-      commit("removeItem", product);
+    removeBook({ commit }, product) {
+      commit("removeBook", product);
     },
-    addElem({ commit }, item) {
-      commit("addElem", item);
+    addBookItem({ commit }, item) {
+      commit("addBookItem", item);
     },
-    removeElem({ commit }, item) {
-      commit("removeElem", item);
+    removeBookItem({ commit }, item) {
+      commit("removeBookItem", item);
     },
     createOrder({ commit }) {
       commit("createOrder");
     }
   },
   mutations: {
-    addItem(state, product) {
+    addBook(state, product) {
       if (state.basket !== null) {
         let result = state.basket.filter(
           item => item.product.id === product.id
@@ -42,11 +42,16 @@ const basketStore = {
       }
       localStorage.setItem("basket", JSON.stringify(state.basket));
     },
-    removeItem(state, product) {
-      state.basket = state.basket.filter(item => item.product !== product);
-      localStorage.setItem("basket", JSON.stringify(state.basket));
+    removeBook(state, product) {
+      state.basket = state.basket.filter(
+        item => item.product.id !== product.id
+      );
+      if (state.basket.length === 0) {
+        localStorage.removeItem("basket");
+        state.basket = null;
+      } else localStorage.setItem("basket", JSON.stringify(state.basket));
     },
-    addElem(state, item) {
+    addBookItem(state, item) {
       let result = state.basket.filter(
         stateItem => stateItem.product.id === item.product.id
       );
@@ -54,7 +59,7 @@ const basketStore = {
         state.item = item.count;
       });
     },
-    removeElem(state, item) {
+    removeBookItem(state, item) {
       let result = state.basket.filter(
         stateItem => stateItem.product.id === item.product.id
       );
@@ -64,12 +69,11 @@ const basketStore = {
     },
     createOrder(state) {
       var products = [];
-
       state.basket.forEach(element => {
         products.push({ count: element.count, productId: element.product.id });
       });
       orderService.post(products);
-      state.basket = [];
+      state.basket = null;
       router.push("/");
     }
   }

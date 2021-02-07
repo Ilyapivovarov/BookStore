@@ -1,34 +1,75 @@
 <template>
   <div class="basket">
-    <div class="basketAny" v-if="basketList !== null && basketList.length > 0">
-      <p class="title">Ваш заказ:</p>
-      <BasketItem v-for="(item, id) in basketList" :key="id" :item="item" />
-      <div class="orderFooter">
-        <button @click="createNewOrder()">Оформить заказ</button>
-        <span class="totalPrice"> Итого: {{ totalPrice }} р</span>
-        <span class="error">{{ error }}</span>
+    <div class="basketAny">
+      <h1>Корзина товаров</h1>
+      <div class="basketWrapper">
+        <BasketItem
+          v-for="(item, id) in basketList"
+          :key="id"
+          :item="item"
+          :count="id"
+        />
+        <div class="orderFooter">
+          <button
+            class="createOrder"
+            :disabled="!basketList"
+            @click="openPopup()"
+          >
+            Оформить заказ
+          </button>
+          <div class="totalPrice">
+            <span> Итого: {{ totalPrice }} руб.</span>
+          </div>
+        </div>
+        <Popup
+          v-if="showPopup && user"
+          submitBtn="Да"
+          closeBtn="Нет"
+          @closePopup="closePopup()"
+          @submit="createNewOrder()"
+        >
+          <h2>Вы уверенны что хотите сделать заказ?</h2>
+        </Popup>
+        <Popup
+          v-if="showPopup && !user"
+          submitBtn="На страницу авторизации"
+          closeBtn="Закрыть окно"
+          @closePopup="closePopup()"
+          @submit="pushToLogin()"
+        >
+          <h2>Пожалуйста, пройдите авторизацию</h2>
+        </Popup>
       </div>
-    </div>
-
-    <div class="basketEmpty" v-else>
-      Корзина пуста
+      <div class="basketEmpty" v-if="!basketList">
+        Корзина пуста
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import BasketItem from "../components/Basket/BasketItem";
+import Popup from "../components/Popup/PopupWindow";
+import router from "@/router";
 
 export default {
   components: {
-    BasketItem
+    BasketItem,
+    Popup
   },
   data: () => ({
-    error: ""
+    error: "",
+    totalPrice: 0,
+    showPopup: false
   }),
   computed: {
+    user() {
+      return this.$store.state.auth.user;
+    },
     basketList() {
       if (this.$store.state.basket.basket !== null) {
+        var vm = this;
+        vm.totalPrice = 0;
         return this.$store.state.basket.basket.map(item => {
           this.totalPrice = this.totalPrice + item.product.price * item.count;
           return item;
@@ -36,13 +77,6 @@ export default {
       } else {
         return null;
       }
-    },
-    totalPrice() {
-      var a = 0;
-      this.$store.state.basket.basket.map(item => {
-        a = a + item.product.price * item.count;
-      });
-      return a;
     }
   },
   methods: {
@@ -52,6 +86,15 @@ export default {
       } else {
         this.error = "Корзина ничего нет";
       }
+    },
+    openPopup() {
+      this.showPopup = true;
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    pushToLogin() {
+      router.push("/login");
     }
   }
 };
@@ -59,18 +102,28 @@ export default {
 
 <style scoped>
 .basket {
-  border-left: solid 1px #e7e7e7;
-  border-right: solid 1px #e7e7e7;
+  border-top: none;
+  margin-top: 20px;
+  padding: 7px;
+  position: relative;
+}
+.basketWrapper {
+  border: solid 1px #e7e7e7;
+  margin-top: 48px;
+  border-radius: 5px;
+  padding: 5px;
+}
+h1 {
+  position: absolute;
+  top: -5px;
+  left: 7px;
+  border: solid 1px #e7e7e7;
+  display: inline-block;
+  border-bottom: solid #fff;
+  border-radius: 5px;
+  padding: 5px;
+}
 
-  margin-top: 20px;
-}
-.basketAny {
-  margin-top: 20px;
-  margin-left: 5px;
-}
-.title {
-  font-size: 25px;
-}
 .totalPrice {
   float: right;
   font-size: 24px;
@@ -83,5 +136,26 @@ export default {
   text-align: center;
   font-size: 25px;
   color: gray;
+  margin-top: 50px;
+}
+
+.createOrder {
+  font-size: 23px;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  border-radius: 2px;
+}
+
+.createOrder:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  transition: 0.3s;
+}
+.createOrder:disabled {
+  display: none;
 }
 </style>

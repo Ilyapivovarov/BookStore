@@ -1,6 +1,9 @@
 <template>
   <div class="order">
-    <OrderList />
+    <OrderList v-if="this.$store.state.auth.status.loggedIn" />
+    <div v-else>
+      <h2>Вы не авторизованы</h2>
+    </div>
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using BookStore.AppData.Models;
 
 namespace BookStore.AppData.Entities
@@ -11,11 +10,15 @@ namespace BookStore.AppData.Entities
         
         public string Name { get; set; }
 
-        public List<Basket> Products { get; set; } = new List<Basket>();
+        public List<Basket> Products { get; } = new List<Basket>();
+        
+        public int CustomerId { get; set; }
 
-        public User Customer { get; set; }
+        public DateTime CreationDate { get; } = DateTime.Now;
 
-        public DateTime DateOfCompletion { get; private set; } = DateTime.Today.AddDays(3);
+        public DateTime DateOfCompletion { get; } = DateTime.Now.AddDays(3);
+
+        public float TotalPrice { get; set; }
 
         public OrderStatus Status { get; set; }
 

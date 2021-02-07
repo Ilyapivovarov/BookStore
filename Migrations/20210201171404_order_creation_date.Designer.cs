@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20210131094859_productId")]
-    partial class productId
+    [Migration("20210201171404_order_creation_date")]
+    partial class order_creation_date
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,11 +28,8 @@ namespace BookStore.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateOfCompletion")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -40,9 +37,10 @@ namespace BookStore.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -119,15 +117,6 @@ namespace BookStore.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Basket");
-                });
-
-            modelBuilder.Entity("BookStore.AppData.Entities.Order", b =>
-                {
-                    b.HasOne("BookStore.AppData.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>

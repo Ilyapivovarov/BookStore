@@ -1,7 +1,19 @@
 import { userService } from "@/services";
-import router from "@/router";
 
-const user = JSON.parse(localStorage.getItem("user"));
+var user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+  var exp = new Date(0);
+  exp.setUTCSeconds(user.exp);
+
+  var now = new Date();
+
+  if (exp < now) {
+    userService.logout();
+    user = null;
+  }
+}
+
 const initialState = user
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };
@@ -11,34 +23,32 @@ const authStore = {
   state: initialState,
   actions: {
     login({ commit }, login) {
-      userService.login(login).then(user => {
-        commit("loginSuccess", user);
-        router.push("/about");
+      return userService.login(login).then(user => {
+        if (user) {
+          commit("login", user);
+          return true;
+        } else {
+          return false;
+        }
       });
     },
     logout({ commit }) {
       userService.logout();
       commit("logout");
-      location.href = "/";
-      //router.push("/");
     }
   },
   mutations: {
-    loginRequest(state, user) {
-      state.status = { loggingIn: true };
-      state.user = user;
-    },
-    loginSuccess(state, user) {
+    login(state, user) {
       state.status = { loggedIn: true };
       state.user = user;
-    },
-    loginFailure(state) {
-      state.status = { loggedIn: false };
-      state.user = null;
+      location.href = "/";
     },
     logout(state) {
       state.status = { loggedIn: false };
       state.user = null;
+    },
+    loginFailed(state) {
+      state.status = { loggedIn: false };
     }
   }
 };

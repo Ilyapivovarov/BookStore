@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Folder Include="AppData\" />
-    <Folder Include="AppData\Entities \" />
+    <Folder Include="AppData\Auth" />
     <Folder Include="AppData\Models\" />
     <Folder Include="Controllers\" />
   </ItemGroup>

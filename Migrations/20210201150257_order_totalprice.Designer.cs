@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20210126173745_init")]
-    partial class init
+    [Migration("20210201150257_order_totalprice")]
+    partial class order_totalprice
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,33 @@ namespace BookStore.Migrations
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.2");
+
+            modelBuilder.Entity("BookStore.AppData.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateOfCompletion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
 
             modelBuilder.Entity("BookStore.AppData.Entities.Product", b =>
                 {
@@ -36,6 +63,9 @@ namespace BookStore.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -69,22 +99,39 @@ namespace BookStore.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BookStore.AppData.Models.Session", b =>
+            modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("Token")
-                        .HasColumnType("text");
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sessions");
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Basket");
+                });
+
+            modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>
+                {
+                    b.HasOne("BookStore.AppData.Entities.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("BookStore.AppData.Entities.Order", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20210127164339_price")]
-    partial class price
+    [Migration("20210201135007_custormerid")]
+    partial class custormerid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,15 +28,19 @@ namespace BookStore.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateOfCompletion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -57,15 +61,10 @@ namespace BookStore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("integer");
-
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Products");
                 });
@@ -97,16 +96,30 @@ namespace BookStore.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BookStore.AppData.Entities.Order", b =>
+            modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>
                 {
-                    b.HasOne("BookStore.AppData.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
-                    b.Navigation("Customer");
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Basket");
                 });
 
-            modelBuilder.Entity("BookStore.AppData.Entities.Product", b =>
+            modelBuilder.Entity("BookStore.AppData.Models.Basket", b =>
                 {
                     b.HasOne("BookStore.AppData.Entities.Order", null)
                         .WithMany("Products")
