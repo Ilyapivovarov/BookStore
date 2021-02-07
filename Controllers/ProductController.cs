@@ -38,7 +38,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var products = DataBase.Products.Where(p => p.Count > 0).ToList();
+            var products = DataBase.Products.OrderBy(p => p.Name).ToList();
             return Ok(products);
         }
 

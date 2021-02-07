@@ -46,7 +46,10 @@ const basketStore = {
       state.basket = state.basket.filter(
         item => item.product.id !== product.id
       );
-      localStorage.setItem("basket", JSON.stringify(state.basket));
+      if (state.basket.length === 0) {
+        localStorage.removeItem("basket");
+        state.basket = null;
+      } else localStorage.setItem("basket", JSON.stringify(state.basket));
     },
     addElem(state, item) {
       let result = state.basket.filter(

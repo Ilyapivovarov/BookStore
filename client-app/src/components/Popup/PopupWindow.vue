@@ -3,15 +3,15 @@
     <div class="popupWindow">
       <div class="popupHeader">
         <span>
-          {{ popupTitle }}
+          <h2>{{ popupTitle }}</h2>
         </span>
       </div>
       <div class="popupContent">
         <slot> </slot>
       </div>
       <div class="popupFooter">
-        <button @click="submit()">{{ submitBtn }}</button>
-        <button @click="close()">{{ closeBtn }}</button>
+        <button class="submint" @click="submit()">{{ submitBtn }}</button>
+        <button class="cancel" @click="close()">{{ closeBtn }}</button>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@ export default {
   justify-content: space-between;
   align-items: right;
 }
-.popupContent {
+.popupContent > * {
   display: grid;
   width: 100%;
 }
@@ -79,5 +79,39 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.submint {
+  font-size: 18px;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  border-radius: 2px;
+}
+
+.submint:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 200, 0);
+  border: solid 1px rgb(0, 100, 0);
+  transition: 0.3s;
+}
+
+.cancel {
+  font-size: 18px;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  color: rgb(255, 0, 0);
+  border: solid 1px rgb(100, 0, 0);
+  border-radius: 2px;
+}
+
+.cancel:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 0, 0);
+  border: solid 1px rgb(100, 0, 0);
+  transition: 0.3s;
 }
 </style>

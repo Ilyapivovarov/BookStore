@@ -20,7 +20,6 @@ namespace BookStore.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
         private ApplicationContext DataBase;
 
@@ -30,12 +29,19 @@ namespace BookStore.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             var ordersCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.CustomerId == UserId).ToList();
-            
-            return Ok(ordersCurUser);
+            foreach (var order in ordersCurUser)
+            {
+                if (order.DateOfCompletion <= DateTime.Now)
+                {
+                    order.Status = Order.OrderStatus.Completed;
+                }
+            }
 
+            await DataBase.SaveChangesAsync();
+            return Ok(ordersCurUser);
         }
 
         [HttpGet("{id}")]
@@ -45,6 +51,7 @@ namespace BookStore.Controllers
             {
                 return BadRequest();
             }
+
             if (!DataBase.Orders.Any(o => o.Id == id))
             {
                 return NotFound();
@@ -58,18 +65,20 @@ namespace BookStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult>  CreateOrder([FromBody] Basket[] basket)
+        public async Task<IActionResult> CreateOrder([FromBody] Basket[] basket)
         {
             if (basket == null)
             {
                 return BadRequest();
             }
+
             if (!basket.Any())
             {
                 return NoContent();
             }
+
             var curUser = DataBase.Users.Single(u => u.Id == UserId);
-            
+
             var order = new Order
             {
                 Name = "Заказ №" + UserId.ToString() + "-" + DateTime.UtcNow.Ticks.ToString().Substring(4),
@@ -78,7 +87,7 @@ namespace BookStore.Controllers
             };
 
             float totalPrice = 0;
-            
+
             foreach (var item in basket)
             {
                 var product = DataBase.Products.Single(p => p.Id == item.ProductId);
@@ -89,7 +98,7 @@ namespace BookStore.Controllers
             }
 
             order.TotalPrice = totalPrice;
-            
+
             DataBase.Orders.Add(order);
             await DataBase.SaveChangesAsync();
             return Ok();

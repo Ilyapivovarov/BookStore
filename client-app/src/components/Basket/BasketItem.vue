@@ -1,13 +1,8 @@
 <template>
-  <div class="prductItem">
-    <div class="productShortInfo">
-      Название: {{ item.product.name }}
-      <div class="shortInfo">
-        Описание:
-        {{ item.product.descriptoin }}
-      </div>
-    </div>
-    <div calss="productFooter">
+  <div class="basketItem">
+    <h2>Товар №{{ count + 1 }}</h2>
+    <Product v-bind:product="item.product" />
+    <div calss="basketFooter">
       <div class="countBtn">
         <p>Колличество</p>
         <img class="arrow" @click="removeItem()" :src="leftArrow" />
@@ -15,9 +10,9 @@
         <img class="arrow" @click="addItem()" :src="rightArrow" />
         <span class="error">{{ errorMsg }}</span>
       </div>
-      <div class="remove">
-        <img class="rubbish" :src="rubbish" @click="removeFromBasket()" />
-      </div>
+    </div>
+    <div class="remove">
+      <img class="rubbish" :src="rubbish" @click="removeFromBasket()" />
     </div>
   </div>
 </template>
@@ -26,12 +21,14 @@
 import leftArrow from "../../assets/left-arrow.png";
 import rightArrow from "../../assets/right-arrow.png";
 import rubbish from "../../assets/rubbish.png";
+import Product from "../Product/Product";
 
 export default {
   name: "BasketItem",
-
+  components: { Product },
   props: {
-    item: Object
+    item: Object,
+    count: Number
   },
   data: () => ({
     errorMsg: " ",
@@ -62,8 +59,7 @@ export default {
 </script>
 
 <style scoped>
-.prductItem {
-  border: solid 1px;
+.basketItem {
   height: auto;
   margin: 5px;
   padding: 10px;
@@ -74,7 +70,7 @@ export default {
   margin-left: 5px;
 }
 
-.productFooter {
+.basketFooter {
   padding-left: 5px;
 }
 .error {
@@ -102,11 +98,13 @@ export default {
   margin-right: 20px;
   top: -35px;
   float: right;
-  width: 30px;
+  width: 25px;
 }
 
 .rubbish:hover {
+  transition: 0.3s;
   cursor: pointer;
+  width: 30px;
 }
 .infoWrpaper {
   padding: 4px;

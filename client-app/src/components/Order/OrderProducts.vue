@@ -1,10 +1,14 @@
 <template>
   <div class="basketItem">
-    <div class="productTitle">{{ count }}. {{ product.name }}</div>
+    <div class="productTitle">
+      {{ count }}.
+      <h4>{{ product.name }}</h4>
+    </div>
     <div class="productCountInfo">
-      <div>{{ basketItem.count }} ед.</div>
-
-      <div>{{ product.price * basketItem.count }} р.</div>
+      <div>
+        <span>{{ basketItem.count }} ед.</span>
+        <span> {{ product.price * basketItem.count }} р.</span>
+      </div>
     </div>
   </div>
 </template>
@@ -33,5 +37,11 @@ export default {
   display: flex;
   justify-content: space-between;
   border-bottom: solid 1px rgb(46, 46, 46);
+}
+h4 {
+  display: inline;
+}
+span {
+  margin-left: 5px;
 }
 </style>

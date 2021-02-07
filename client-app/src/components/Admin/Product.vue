@@ -1,9 +1,9 @@
 <template>
-  <div class="prduct-item">
+  <div class="adminProduct">
     <PopupWindow
       v-if="showPopup"
       popupTitle="Редактирование товара"
-      submitBtn="Схранить"
+      submitBtn="Сохранить"
       closeBtn="Закрыть без сохранения"
       @closePopup="closePopup()"
       @submit="saveProduct()"
@@ -27,21 +27,41 @@
       <span v-for="(error, id) in errors" :key="id"> {{ error }} </span>
     </PopupWindow>
 
-    <div class="toolbar">
-      <button class="edit" @click="openPopup()">Редактировать</button>
+    <div class="productItemWrapper">
+      <div class="toolbar">
+        <img
+          class="edit"
+          :src="edit"
+          alt="Редактировать"
+          @click="openPopup()"
+        />
+      </div>
+      <div class="productTitle">
+        <div>
+          <h2>{{ product.name }}</h2>
+        </div>
+
+        <div>
+          <h3>Колличество на складе: {{ product.count }}</h3>
+        </div>
+      </div>
+      <div class="productShortInfo">
+        <div class="shortInfo">
+          <h3>
+            Краткое описание:
+          </h3>
+          {{ product.descriptoin.substr(0, 100) }}
+          <span v-if="product.descriptoin.length > 100">...</span>
+        </div>
+      </div>
     </div>
-    <div class="product-title">
-      {{ product.name }} Колличество: {{ product.count }}
-    </div>
-    <div class="product-short-info">
-      <div class="short-info">{{ product.descriptoin.substr(0, 100) }}...</div>
-    </div>
-    <div calss="product-footer"></div>
   </div>
 </template>
 
 <script>
 import PopupWindow from "../Popup/PopupWindow";
+import edit from "../../assets/edit.png";
+import { productService } from "@/services";
 
 export default {
   components: {
@@ -51,6 +71,7 @@ export default {
     product: Object
   },
   data: () => ({
+    edit,
     showPopup: false,
     errors: []
   }),
@@ -62,7 +83,7 @@ export default {
       this.showPopup = false;
     },
     saveProduct() {
-      this.$store.dispatch("product/update", this.product);
+      productService.put(this.product);
       this.showPopup = false;
     }
   }
@@ -70,7 +91,14 @@ export default {
 </script>
 
 <style scoped>
-.product-title {
+.productItemWrapper {
+  padding: 5px;
+}
+.productItemWrapper div {
+  margin: 5px;
+}
+
+.productTitle {
   border-bottom: solid 1px grey;
   padding-bottom: 6px;
 }
@@ -80,7 +108,7 @@ textarea {
   height: 170px;
   font-size: 14px;
 }
-.prduct-item {
+.adminProduct {
   border: solid 1px;
   margin: 5px;
   padding: 10px;
@@ -93,7 +121,20 @@ textarea {
   margin-right: 2px;
   float: right;
 }
-.product-short-info {
+.productShortInfo {
   padding-top: 7px;
+}
+
+.toolbar {
+  margin-top: 10px;
+}
+.edit {
+  height: 25px;
+  margin-right: 20px;
+}
+.edit:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  height: 30px;
 }
 </style>

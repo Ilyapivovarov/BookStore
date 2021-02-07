@@ -24,24 +24,28 @@ const authStore = {
   actions: {
     login({ commit }, login) {
       userService.login(login).then(user => {
-        commit("login", user);
-        location.href = "/";
+        if (user) commit("login", user);
+        else;
       });
     },
     logout({ commit }) {
       userService.logout();
       commit("logout");
-      location.href = "/";
     }
   },
   mutations: {
     login(state, user) {
       state.status = { loggedIn: true };
       state.user = user;
+      location.href = "/";
     },
     logout(state) {
       state.status = { loggedIn: false };
       state.user = null;
+      location.href = "/";
+    },
+    loginFailed(state) {
+      state.status = { loggedIn: false };
     }
   }
 };

@@ -46,15 +46,9 @@ const productStore = {
     },
     updateProduct(state, success) {
       state.success = success;
-      if (success) {
-        state.msg = "Обновлен";
-      } else state.msg = "Не обновлен";
     },
     removeProduct(state, success) {
       state.success = success;
-      if (success) {
-        state.msg = "Удален";
-      } else state.msg = "Не удален";
     }
   },
   getters: {

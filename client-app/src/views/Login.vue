@@ -1,39 +1,26 @@
 <template>
   <div>
-    <h2>Login</h2>
-    <form @submit.prevent="handleSubmit">
+    <h1>Вход</h1>
+    <form class="loginForm" @submit.prevent="submit">
       <div class="form-group">
-        <label for="email">email</label>
-        <input
-          type="text"
-          v-model="email"
-          name="email"
-          class="form-control"
-          :class="{ 'is-invalid': submitted && !email }"
-        />
-        <div v-show="submitted && !email" class="invalid-feedback">
-          email is required
+        <label for="email">Email</label>
+        <input type="text" v-model="email" name="email" />
+        <div v-show="submitted && !email" class="erros">
+          Введите Email
         </div>
       </div>
       <div class="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          v-model="password"
-          name="password"
-          class="form-control"
-          :class="{ 'is-invalid': submitted && !password }"
-        />
-        <div v-show="submitted && !password" class="invalid-feedback">
-          Password is required
+        <label htmlFor="password">Пароль</label>
+        <input type="password" v-model="password" name="password" />
+        <div v-show="submitted && !password" class="erros">
+          Введите пароль
+        </div>
+        <div v-show="submitted && loginError" class="erros">
+          {{ loginError }}
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="loggingIn">Login</button>
-        <img
-          v-show="loggingIn"
-          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
-        />
+        <button :disabled="loggingIn">Вход</button>
       </div>
     </form>
   </div>
@@ -43,13 +30,12 @@
 import router from "@/router";
 
 export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      submitted: false
-    };
-  },
+  data: () => ({
+    email: "",
+    password: "",
+    submitted: false,
+    loginError: ""
+  }),
   computed: {
     loggingIn() {
       return this.$store.state.auth.status.loggedIn;
@@ -61,12 +47,16 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    submit() {
       this.submitted = true;
-      const { email, password } = this;
-      const { dispatch } = this.$store;
-      if (email && password) {
-        dispatch("auth/login", { email, password });
+      if (this.email && this.password) {
+        this.$store.dispatch("auth/login", {
+          email: this.email,
+          password: this.password
+        });
+        if (!this.$store.state.auth.status.loggedIn) {
+          this.loginError = "Пользователь не найден";
+        }
       }
     }
   }
@@ -74,17 +64,26 @@ export default {
 </script>
 
 <style scoped>
-#login {
-  width: 100%;
-}
-.login-form {
+.loginForm {
   width: 400px;
 }
-.login-form * {
+.loginForm * {
   display: grid;
+  margin: 3px;
   width: 100%;
 }
 button {
   margin-top: 5px;
+  background-color: rgb(0, 0, 255);
+  color: #ffffff;
+  border: none;
+  height: 30px;
+  padding-top: 3px;
+}
+button:hover {
+  background-color: rgb(0, 57, 255);
+}
+.erros {
+  color: red;
 }
 </style>

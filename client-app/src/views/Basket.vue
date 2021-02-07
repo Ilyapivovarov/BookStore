@@ -1,19 +1,30 @@
 <template>
   <div class="basket">
-    <div class="basketAny" v-if="basketList !== null && basketList.length > 0">
-      <p class="title">Ваш заказ:</p>
-      <BasketItem v-for="(item, id) in basketList" :key="id" :item="item" />
-      <div class="orderFooter">
-        <button class="createOrder" @click="createNewOrder()">
-          Оформить заказ
-        </button>
-        <span class="totalPrice"> Итого: {{ totalPrice }} р</span>
-        <span class="error">{{ error }}</span>
+    <div class="basketAny">
+      <h1>Корзина товаров</h1>
+      <div class="basketWrapper">
+        <BasketItem
+          v-for="(item, id) in basketList"
+          :key="id"
+          :item="item"
+          :count="id"
+        />
+        <div class="orderFooter">
+          <button
+            class="createOrder"
+            :disabled="!basketList"
+            @click="createNewOrder()"
+          >
+            Оформить заказ
+          </button>
+          <div class="totalPrice">
+            <span> Итого: {{ totalPrice }} руб.</span>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="basketEmpty" v-else>
-      Корзина пуста
+      <div class="basketEmpty" v-if="!basketList">
+        Корзина пуста
+      </div>
     </div>
   </div>
 </template>
@@ -57,18 +68,28 @@ export default {
 
 <style scoped>
 .basket {
-  border-left: solid 1px #e7e7e7;
-  border-right: solid 1px #e7e7e7;
+  border-top: none;
+  margin-top: 20px;
+  padding: 7px;
+  position: relative;
+}
+.basketWrapper {
+  border: solid 1px #e7e7e7;
+  margin-top: 48px;
+  border-radius: 5px;
+  padding: 5px;
+}
+h1 {
+  position: absolute;
+  top: -5px;
+  left: 7px;
+  border: solid 1px #e7e7e7;
+  display: inline-block;
+  border-bottom: solid #fff;
+  border-radius: 5px;
+  padding: 5px;
+}
 
-  margin-top: 20px;
-}
-.basketAny {
-  margin-top: 20px;
-  margin-left: 5px;
-}
-.title {
-  font-size: 25px;
-}
 .totalPrice {
   float: right;
   font-size: 24px;
@@ -81,6 +102,7 @@ export default {
   text-align: center;
   font-size: 25px;
   color: gray;
+  margin-top: 50px;
 }
 
 .createOrder {
@@ -98,5 +120,8 @@ export default {
   background-color: rgb(0, 200, 0);
   border: solid 1px rgb(0, 100, 0);
   transition: 0.3s;
+}
+.createOrder:disabled {
+  display: none;
 }
 </style>

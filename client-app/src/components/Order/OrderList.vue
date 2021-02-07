@@ -1,6 +1,6 @@
 <template>
   <div class="orderList">
-    <h2>Мои заказы</h2>
+    <h1>Мои заказы</h1>
     <div>
       <select class="filter" v-model="filters">
         <option>Все заказы</option>
@@ -16,16 +16,20 @@
       :class="selectStyle(order)"
     >
       <div class="orderName">
-        {{ order.name }}
+        <h2>
+          {{ order.name }}
+        </h2>
       </div>
 
       <div class="orderInfo">
-        Дата завершения заказа
-        {{ order.dateOfCompletion.split("T")[0] }}
-        <div v-if="order.status === 1">
+        <h3>
+          Дата завершения заказа: {{ order.dateOfCompletion.split("T")[0] }}
+        </h3>
+
+        <h3 v-if="order.status === 1">
           Статус: "В процессе"
-        </div>
-        <div v-else>Статус: "Выполнен"</div>
+        </h3>
+        <h3 v-else>Статус: "Выполнен"</h3>
       </div>
 
       <div class="orderProducts">
@@ -38,7 +42,7 @@
       </div>
 
       <div class="orderFooter">
-        <div>Итого: {{ order.totalPrice }}р</div>
+        <h3>Итого: {{ order.totalPrice }}р</h3>
       </div>
     </div>
   </div>
