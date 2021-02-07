@@ -49,14 +49,18 @@ export default {
   methods: {
     submit() {
       this.submitted = true;
+      this.loginError = "";
       if (this.email && this.password) {
-        this.$store.dispatch("auth/login", {
-          email: this.email,
-          password: this.password
-        });
-        if (!this.$store.state.auth.status.loggedIn) {
-          this.loginError = "Пользователь не найден";
-        }
+        this.$store
+          .dispatch("auth/login", {
+            email: this.email,
+            password: this.password
+          })
+          .then(status => {
+            if (!status) {
+              this.loginError = "Введен неверный логин или пароль";
+            }
+          });
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="orderList">
-    <h1>Мои заказы</h1>
     <div>
+      <h1>Мои заказы</h1>
       <select class="filter" v-model="filters">
         <option>Все заказы</option>
         <option>Только не выполненные заказы</option>
@@ -82,7 +82,7 @@ export default {
       } else return "orderCompleted";
     }
   },
-  beforeCreate() {
+  mounted() {
     orderService.getAll().then(response => {
       this.ordersStore = response;
       this.orders = this.ordersStore.filter(order => order.status === 1);

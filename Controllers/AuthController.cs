@@ -13,8 +13,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using static BookStore.AppData.Entities.User;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace BookStore.Controllers
 {
     [Route("api/[controller]")]
@@ -28,7 +26,6 @@ namespace BookStore.Controllers
         {
             DataBase = context;
             AuthOptions = authOptions;
-
             
             if (!DataBase.Users.Any())
             {
@@ -40,8 +37,18 @@ namespace BookStore.Controllers
                     Password = "admin@mail.com",
                     Roles = new Role[] { Role.Admin }
                 });
+                
+                DataBase.Users.Add(new User
+                {
+                    Email = "user@mail.com",
+                    FirstName = "Us",
+                    LastName = "Er",
+                    Password = "user@mail.com",
+                    Roles = new Role[] { Role.User }
+                });
+                DataBase.SaveChanges();
             }
-            DataBase.SaveChanges();
+          
 
         }
 
@@ -67,7 +74,6 @@ namespace BookStore.Controllers
         private User AuthenticateUser(string email, string password)
         {
             var user = DataBase.Users.Single(u => u.Email == email && u.Password == password);
-
             return user;
         }
 

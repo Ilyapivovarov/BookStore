@@ -13,7 +13,7 @@
           <button
             class="createOrder"
             :disabled="!basketList"
-            @click="createNewOrder()"
+            @click="openPopup()"
           >
             Оформить заказ
           </button>
@@ -21,6 +21,15 @@
             <span> Итого: {{ totalPrice }} руб.</span>
           </div>
         </div>
+        <Popup
+          v-if="showPopup"
+          submitBtn="Да"
+          closeBtn="Нет"
+          @closePopup="closePopup()"
+          @submit="createNewOrder()"
+        >
+          <h2>Вы уверенны что хотите сделать заказ?</h2>
+        </Popup>
       </div>
       <div class="basketEmpty" v-if="!basketList">
         Корзина пуста
@@ -31,14 +40,17 @@
 
 <script>
 import BasketItem from "../components/Basket/BasketItem";
+import Popup from "../components/Popup/PopupWindow";
 
 export default {
   components: {
-    BasketItem
+    BasketItem,
+    Popup
   },
   data: () => ({
     error: "",
-    totalPrice: 0
+    totalPrice: 0,
+    showPopup: false
   }),
   computed: {
     basketList() {
@@ -61,6 +73,12 @@ export default {
       } else {
         this.error = "Корзина ничего нет";
       }
+    },
+    openPopup() {
+      this.showPopup = true;
+    },
+    closePopup() {
+      this.showPopup = false;
     }
   }
 };

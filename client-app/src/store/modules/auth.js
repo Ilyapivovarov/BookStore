@@ -1,4 +1,5 @@
 import { userService } from "@/services";
+import router from "@/router";
 
 var user = JSON.parse(localStorage.getItem("user"));
 
@@ -23,9 +24,13 @@ const authStore = {
   state: initialState,
   actions: {
     login({ commit }, login) {
-      userService.login(login).then(user => {
-        if (user) commit("login", user);
-        else;
+      return userService.login(login).then(user => {
+        if (user) {
+          commit("login", user);
+          return true;
+        } else {
+          return false;
+        }
       });
     },
     logout({ commit }) {
@@ -37,12 +42,14 @@ const authStore = {
     login(state, user) {
       state.status = { loggedIn: true };
       state.user = user;
-      location.href = "/";
+      router.push("/");
+      //location.href = "/";
     },
     logout(state) {
       state.status = { loggedIn: false };
       state.user = null;
-      location.href = "/";
+
+      //location.href = "/";
     },
     loginFailed(state) {
       state.status = { loggedIn: false };

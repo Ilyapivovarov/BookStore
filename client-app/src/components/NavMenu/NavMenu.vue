@@ -2,7 +2,6 @@
   <nav>
     <router-link class="navLink" to="/"> Главная страница </router-link> |
     <router-link class="navLink" to="/my-orders"> Мои заказы </router-link> |
-    <router-link class="navLink" to="/about"> About </router-link> |
     <router-link class="navLink" to="/basket">
       Корзина ({{ count }})
     </router-link>

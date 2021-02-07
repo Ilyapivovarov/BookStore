@@ -69,12 +69,11 @@ const basketStore = {
     },
     createOrder(state) {
       var products = [];
-
       state.basket.forEach(element => {
         products.push({ count: element.count, productId: element.product.id });
       });
       orderService.post(products);
-      state.basket = [];
+      state.basket = null;
       router.push("/");
     }
   }

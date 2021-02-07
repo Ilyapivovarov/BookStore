@@ -15,8 +15,9 @@ function login(login) {
       localStorage.setItem("token", response.data.access_token);
       return user;
     })
-    .catch(() => {
-      localStorage.removeItem("user");
+    .catch(e => {
+      console.log(e);
+      return false;
     });
 }
 

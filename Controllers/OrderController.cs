@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using BookStore.AppData;
 using BookStore.AppData.Entities;
@@ -10,9 +8,7 @@ using BookStore.AppData.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookStore.Controllers
 {
@@ -32,11 +28,14 @@ namespace BookStore.Controllers
         public async Task<IActionResult> Get()
         {
             var ordersCurUser = DataBase.Orders.Include(o => o.Products).Where(o => o.CustomerId == UserId).ToList();
-            foreach (var order in ordersCurUser)
+            if (ordersCurUser.Any())
             {
-                if (order.DateOfCompletion <= DateTime.Now)
+                foreach (var order in ordersCurUser)
                 {
-                    order.Status = Order.OrderStatus.Completed;
+                    if (order.DateOfCompletion <= DateTime.Now)
+                    {
+                        order.Status = Order.OrderStatus.Completed;
+                    }
                 }
             }
 
