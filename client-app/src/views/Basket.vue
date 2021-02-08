@@ -28,7 +28,7 @@
           @closePopup="closePopup()"
           @submit="createNewOrder()"
         >
-          <h2>Вы уверенны что хотите сделать заказ?</h2>
+          <h2>Вы уверенны, что хотите сделать заказ?</h2>
         </Popup>
         <Popup
           v-if="showPopup && !user"
