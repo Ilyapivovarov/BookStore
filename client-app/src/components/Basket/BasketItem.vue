@@ -2,12 +2,12 @@
   <div class="basketItem">
     <h2>Товар №{{ count + 1 }}</h2>
     <Product v-bind:product="item.product" />
-    <div calss="basketFooter">
+    <div class="basketFooter">
       <div class="countBtn">
         <p>Колличество</p>
-        <img class="arrow" @click="removeBookItem()" :src="leftArrow" />
+        <img class="arrow" @click="removeBookItem()" :src="leftArrow"  alt="Удалить"/>
         {{ item.count }}
-        <img class="arrow" @click="addBookItem()" :src="rightArrow" />
+        <img class="arrow" @click="addBookItem()" :src="rightArrow"  alt="Добавить"/>
         <span class="error">{{ errorMsg }}</span>
       </div>
     </div>
